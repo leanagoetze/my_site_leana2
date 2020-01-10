@@ -5,38 +5,36 @@ bio: My research interests include distributed robotics, mobile computing and pr
   matter.
 education:
   courses:
-  - course: PhD in Artificial Intelligence
-    institution: Stanford University
-    year: 2012
-  - course: MEng in Artificial Intelligence
-    institution: Massachusetts Institute of Technology
-    year: 2009
-  - course: BSc in Artificial Intelligence
-    institution: Massachusetts Institute of Technology
-    year: 2008
-email: ""
+  - course: BS in Biological Sciences
+    institution: University of California, Davis
+    year: 2014
+  - course: Master of Environmental Science and Management (MESM) 
+    institution: University of California, Santa Barbara
+    year: 2021 
+
+email: "lrgoetze@bren.ucsb.edu"
 interests:
-- Artificial Intelligence
-- Computational Linguistics
-- Information Retrieval
-name: Nelson Bighetti
+- Conservation Biology
+- Environmental Data Science
+- Data Analysis
+name: Leana Goetze
 organizations:
-- name: University of California, Santa Barbara
-  url: ""
-role: Master of Environmental Science and Management
+- name: University of California, Santa Barbara- Bren School
+  url: "http://bren.ucsb.edu"
+role: Master student in Environmental Science and Management
 social:
 - icon: envelope
   icon_pack: fas
   link: '#contact'
-- icon: twitter
-  icon_pack: fab
-  link: https://twitter.com/GeorgeCushen
-- icon: google-scholar
-  icon_pack: ai
-  link: https://scholar.google.co.uk/citations?user=sIwtMXoAAAAJ
+#- icon: twitter
+# icon_pack: fab
+# link: https://twitter.com/GeorgeCushen
+#- icon: google-scholar
+#  icon_pack: ai
+#  link: https://scholar.google.co.uk/citations?user=sIwtMXoAAAAJ
 - icon: github
   icon_pack: fab
-  link: https://github.com/gcushen
+  link: https://github.com/leanagoetze
 superuser: true
 user_groups:
 - Researchers
