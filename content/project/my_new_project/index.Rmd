@@ -1,0 +1,30 @@
+---
+title: New post!
+author: ''
+date: '2020-01-09'
+slug: my_new_project
+categories: []
+tags:
+  - data analysis
+  - statistics
+  - R Markdown
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2020-01-09T15:02:28-08:00'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+---
+
+Here's some code:
+
+An amazing plot:
+
+```{r}
+plot(cars)
+```
+
