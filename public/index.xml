@@ -75,21 +75,6 @@
     </item>
     
     <item>
-      <title>New post!</title>
-      <link>/project/my_new_project/</link>
-      <pubDate>Thu, 09 Jan 2020 00:00:00 +0000</pubDate>
-      <guid>/project/my_new_project/</guid>
-      <description>
-
-
-&lt;p&gt;Here’s some code:&lt;/p&gt;
-&lt;p&gt;An amazing plot:&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;plot(cars)&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;/project/my_new_project/index_files/figure-html/unnamed-chunk-1-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
       <title>Writing technical content in Academic</title>
       <link>/post/writing-technical-content/</link>
       <pubDate>Fri, 12 Jul 2019 00:00:00 +0000</pubDate>
@@ -714,6 +699,210 @@ Figure 1: A fancy pie chart.
   &lt;/div&gt;
 &lt;/div&gt;
 &lt;p&gt;Supplementary notes can be added here, including &lt;a href=&#34;https://sourcethemes.com/academic/docs/writing-markdown-latex/&#34;&gt;code and math&lt;/a&gt;.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>project_one</title>
+      <link>/project/project_one/project_one/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>/project/project_one/project_one/</guid>
+      <description>
+&lt;script src=&#34;/rmarkdown-libs/kePrint/kePrint.js&#34;&gt;&lt;/script&gt;
+
+
+&lt;div id=&#34;introduction&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Introduction&lt;/h3&gt;
+&lt;p&gt;Snowshoe hares, &lt;em&gt;Lepus americanus&lt;/em&gt;, can be found in boreal and upper montane forests across North America. Snowshoe hares are primarily herbivorous, eating a variety of flowers, grasses, and plants. In Alaska, hares depend more heavily on grasses and leaves in the summer months, and twigs and bark during the winter. This project aims to explore the seasonal weight distributions of snowhoe hare populations living throughout the Tanana valley in Alaska (Department of Fish and Game).&lt;/p&gt;
+&lt;center&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;knitr::include_graphics(&amp;#39;/images/picture.jpg&amp;#39;)&lt;/code&gt;&lt;/pre&gt;
+&lt;img src=&#34;/images/picture.jpg&#34; /&gt;&lt;!-- --&gt;
+&lt;/center&gt;
+&lt;p&gt;Snowshoe hares have adapted to blend in with their surroundings by seasonally changing their coat colors.&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Credit: Denali National Park and Preserve&lt;/em&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;data-and-methods&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Data and Methods&lt;/h3&gt;
+&lt;p&gt;Data for snowshoe hare weights, measured in grams, from 1999-2012 collected and provided by &lt;a href=&#34;https://doi.org/10.6073/pasta/03dce4856d79b91557d8e6ce2cbcdc14&#34;&gt;Bonanza Creek LTER research team&lt;/a&gt;. Hare measurements obtained from capture-recapture studies across 5 locations in the Tanana valley. For more information on data collection procedures, and the project as a whole, see &lt;a href=&#34;https://portal.lternet.edu/nis/metadataviewer?packageid=knb-lter-bnz.55.22&#34;&gt;metadata&lt;/a&gt;. Data from September, October, and November have been grouped together under “fall”, March, April, and May have been grouped under “spring”, and June, July, and August have been grouped under “Summer”. We did not compare data from the winter months due to a deficit in data collected during this time. Additionally, observations without clear age or gender measurements were removed. All figures were prepared using R software version 3.6.1.&lt;/p&gt;
+&lt;center&gt;
+&lt;p&gt;!&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;knitr::include_graphics(&amp;#39;/images/map.jpg&amp;#39;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/images/map.jpg&#34; /&gt;&lt;!-- --&gt;&lt;/p&gt;
+&lt;/center&gt;
+&lt;p&gt;Snowshoe hare capture-recapture studies occured along the Tanana River and throughout the Bonanza Experimental Research Forest.&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Credit: Long Term Ecological Research Network&lt;/em&gt;&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# attach packages and read in data
+library(tidyverse)
+library(purrr)
+library(dplyr)
+library(lubridate)
+library(tidyr)
+library(car)
+library(ggbeeswarm)
+library(effsize)
+library(kableExtra)
+library(janitor)
+library(ggbeeswarm)
+library(broom)
+hare &amp;lt;- read_csv((&amp;quot;showshoe_lter.csv&amp;quot;), na= &amp;quot;0&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;results&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Results&lt;/h3&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# select data I&amp;#39;m interested in working with (adult males) and drop na values
+hare_am &amp;lt;- hare %&amp;gt;% 
+  select(date, weight, age, sex) %&amp;gt;% 
+  drop_na() %&amp;gt;% 
+  filter(age == &amp;quot;a&amp;quot;| age == &amp;quot;A&amp;quot;) %&amp;gt;% 
+  filter(sex == &amp;quot;m&amp;quot;| sex == &amp;quot;M&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# specify dates just by month
+hare_month &amp;lt;- hare_am %&amp;gt;% 
+  mutate(date_new = lubridate::mdy(date)) %&amp;gt;% 
+  mutate(month = lubridate::month(date_new, label = TRUE)) %&amp;gt;% 
+  select(weight, month) &lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# sort data by seasons
+hare_seasons&amp;lt;- hare_month %&amp;gt;% 
+  mutate(season = dplyr::case_when(month %in% c(&amp;quot;Jan&amp;quot;, &amp;quot;Feb&amp;quot;, &amp;quot;Dec&amp;quot;) ~ &amp;quot;winter&amp;quot;,
+                   month %in% c(&amp;quot;Sep&amp;quot;, &amp;quot;Oct&amp;quot;, &amp;quot;Nov&amp;quot;) ~ &amp;quot;fall&amp;quot;,
+                   month  %in% c(&amp;quot;Jun&amp;quot;, &amp;quot;Jul&amp;quot;, &amp;quot;Aug&amp;quot;) ~ &amp;quot;summer&amp;quot;,
+                   month  %in% c(&amp;quot;Mar&amp;quot;, &amp;quot;Apr&amp;quot;, &amp;quot;May&amp;quot;) ~ &amp;quot;spring&amp;quot;)) %&amp;gt;% 
+  select(weight, season)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# calculate summary statistics
+hare_summary &amp;lt;- hare_seasons %&amp;gt;% 
+  group_by(season) %&amp;gt;% 
+  summarize(mean_weight = round(mean(weight),1),
+            median= round(median(weight),1),
+            sd_weight = round(sd(weight),1),
+            sample_n = n(),
+            se_weight = round(sd(weight, na.rm = TRUE) / sqrt(n()),1),
+            var_weight = var(weight, na.rm = TRUE))&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# make graph visualizing adult male snowshoe hare weights by season and customize
+ggplot()+
+geom_beeswarm (data = hare_seasons, aes(x = season, y = weight), size = 1, alpha = .5,pch = 16, color = &amp;quot;#4D6483&amp;quot;)+
+scale_x_discrete (labels = c(&amp;quot;Fall&amp;quot;, &amp;quot;Spring&amp;quot;, &amp;quot;Summer&amp;quot;, &amp;quot;Winter&amp;quot;))+
+labs(x = &amp;quot;Season&amp;quot;, y = &amp;quot; Weight (Grams)&amp;quot;, title = &amp;quot;Snowshoe Hare Weights by Season \n Adult Males (1999-2012)&amp;quot;)+
+geom_point(data = hare_summary, aes(x=season, y= mean_weight), color = &amp;quot;maroon&amp;quot;, size = 2.5)+
+geom_point(data = hare_summary, aes(x=season, y= median), color = &amp;quot;blue&amp;quot;, size = 1.5, alpha = .7)+
+geom_errorbar(data = hare_summary, 
+                aes(x = season, 
+                    ymin = mean_weight - sd_weight,
+                    ymax = mean_weight + sd_weight),
+                color = &amp;quot;#612F62&amp;quot;,
+                width = 0.09) +
+  theme_light()+
+  theme(plot.title = element_text(hjust= 0.5,
+                                  face = &amp;quot;bold&amp;quot;,
+                                  size = 16,
+                                  margin=margin(0,0,10,0)))+
+  theme(axis.title.x = element_text (face = &amp;quot;bold&amp;quot;,
+                                     size = 14,
+                                     margin=margin(10,0,0,0))) +
+  theme(axis.title.y = element_text (face = &amp;quot;bold&amp;quot;,
+                                     size = 14,
+                                     margin=margin(0,10,0,0)))+
+  scale_y_continuous(limits=c(0,2250), breaks = seq(0,2250, by=250), expand = c(0,0))+
+  theme(panel.background = element_rect(colour = &amp;quot;black&amp;quot;, size=1))+
+  theme(panel.grid.minor = element_blank())&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/project/project_one/project_one_files/figure-html/unnamed-chunk-8-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Figure 1: Seasonal weight differences, excluding Winter, in adult male Snowshoe hares (1999-2012).&lt;/strong&gt; Gray points indicate individual hare weights, measured in grams. Maroon points indicate sample means, and error bars indicate ± standard deviation. Median sample weights are indicated by smaller blue points. Data Source: &lt;a href=&#34;https://portal.lternet.edu/nis/metadataviewer?packageid=knb-lter-bnz.55.22&#34;&gt;Snowshoe hare physical data in Bonanza Creek Experimental Forest: 1999-Present&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Table 1: Adult male snowshoe hare size metrics&lt;/strong&gt;&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# make table of summary statistics (grouped by season)
+hare_table &amp;lt;-hare_summary %&amp;gt;% 
+  select(-se_weight) %&amp;gt;% 
+  select(-var_weight)
+
+  hare_table %&amp;gt;% 
+    kable(col.names = c(&amp;quot;Season&amp;quot;, 
+                      &amp;quot;Mean Weight (grams)&amp;quot;,
+                      &amp;quot;Median Weight (grams)&amp;quot;,
+                      &amp;quot;Standard Deviation&amp;quot;,
+                      &amp;quot;Sample Size&amp;quot;)) %&amp;gt;% 
+  kable_styling(bootstrap_options = &amp;quot;bordered&amp;quot;, 
+                full_width = F,
+                position = &amp;quot;left&amp;quot;) %&amp;gt;% 
+  row_spec(1, background = &amp;quot;#C3C7CC&amp;quot;) %&amp;gt;% 
+  row_spec(3, background = &amp;quot;#C3C7CC&amp;quot;) %&amp;gt;% 
+  row_spec(2, background = &amp;quot;#F1F2F3&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;table class=&#34;table table-bordered&#34; style=&#34;width: auto !important; &#34;&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style=&#34;text-align:left;&#34;&gt;
+Season
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+Mean Weight (grams)
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+Median Weight (grams)
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+Standard Deviation
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+Sample Size
+&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;background-color: #C3C7CC !important;&#34;&gt;
+fall
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;background-color: #C3C7CC !important;&#34;&gt;
+1588.4
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;background-color: #C3C7CC !important;&#34;&gt;
+1620
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;background-color: #C3C7CC !important;&#34;&gt;
+134.9
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;background-color: #C3C7CC !important;&#34;&gt;
+92
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;background-color: #F1F2F3 !important;&#34;&gt;
+spring
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;background-color: #F1F2F3 !important;&#34;&gt;
+1492.6
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;background-color: #F1F2F3 !important;&#34;&gt;
+1500
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;background-color: #F1F2F3 !important;&#34;&gt;
+110.4
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;background-color: #F1F2F3 !important;&#34;&gt;
+55
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;background-color: #C3C7CC !important;&#34;&gt;
+summer
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;background-color: #C3C7CC !important;&#34;&gt;
+1372.4
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;background-color: #C3C7CC !important;&#34;&gt;
+1350
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;background-color: #C3C7CC !important;&#34;&gt;
+213.5
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;background-color: #C3C7CC !important;&#34;&gt;
+151
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;The average mean and median weights of adult male snowshoe hares differ seasonally. Data collected during the fall, spring, and summer months illustrate that on average, adult male hares are the heaviest in fall and weigh the least throughout summer (Figure 1). These trends hold true for both mean and median weight measurements. On average, adult male hares weigh 95.8 grams more in the fall than in the spring, and 216 grams more in the fall than in the summer based on mean measurements. Median weights differ by 120 grams between fall and spring, and 270 grams between fall and summer (Table 1).&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;references&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;References&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;Alaska Department of Fish and Game&lt;/strong&gt; “Snowshoe Hare Species Profile, Alaska Department of Fish and Game.” Snowshoe Hare (Lepus Americanus), www.adfg.alaska.gov/index.cfm?adfg=snowshoehare.main.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Kielland K., F. S. Chapin, R. W. Ruess.&lt;/strong&gt; 2017. Snowshoe hare physical data in Bonanza Creek Experimental Forest: 1999-Present. Environmental Data Initiative. &lt;a href=&#34;https://doi.org/10.6073/pasta/03dce4856d79b91557d8e6ce2cbcdc14&#34; class=&#34;uri&#34;&gt;https://doi.org/10.6073/pasta/03dce4856d79b91557d8e6ce2cbcdc14&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
 </description>
     </item>
     

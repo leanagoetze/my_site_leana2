@@ -1,0 +1,202 @@
+---
+title: "project_one"
+author: "Leana Goetze"
+date: "3/6/2020"
+output: html_document
+---
+
+<script src="/rmarkdown-libs/kePrint/kePrint.js"></script>
+
+
+<div id="introduction" class="section level3">
+<h3>Introduction</h3>
+<p>Snowshoe hares, <em>Lepus americanus</em>, can be found in boreal and upper montane forests across North America. Snowshoe hares are primarily herbivorous, eating a variety of flowers, grasses, and plants. In Alaska, hares depend more heavily on grasses and leaves in the summer months, and twigs and bark during the winter. This project aims to explore the seasonal weight distributions of snowhoe hare populations living throughout the Tanana valley in Alaska (Department of Fish and Game).</p>
+<center>
+<pre class="r"><code>knitr::include_graphics(&#39;/images/picture.jpg&#39;)</code></pre>
+<img src="/images/picture.jpg" /><!-- -->
+</center>
+<p>Snowshoe hares have adapted to blend in with their surroundings by seasonally changing their coat colors.</p>
+<p><em>Credit: Denali National Park and Preserve</em></p>
+</div>
+<div id="data-and-methods" class="section level3">
+<h3>Data and Methods</h3>
+<p>Data for snowshoe hare weights, measured in grams, from 1999-2012 collected and provided by <a href="https://doi.org/10.6073/pasta/03dce4856d79b91557d8e6ce2cbcdc14">Bonanza Creek LTER research team</a>. Hare measurements obtained from capture-recapture studies across 5 locations in the Tanana valley. For more information on data collection procedures, and the project as a whole, see <a href="https://portal.lternet.edu/nis/metadataviewer?packageid=knb-lter-bnz.55.22">metadata</a>. Data from September, October, and November have been grouped together under “fall”, March, April, and May have been grouped under “spring”, and June, July, and August have been grouped under “Summer”. We did not compare data from the winter months due to a deficit in data collected during this time. Additionally, observations without clear age or gender measurements were removed. All figures were prepared using R software version 3.6.1.</p>
+<center>
+<p>!</p>
+<pre class="r"><code>knitr::include_graphics(&#39;/images/map.jpg&#39;)</code></pre>
+<p><img src="/images/map.jpg" /><!-- --></p>
+</center>
+<p>Snowshoe hare capture-recapture studies occured along the Tanana River and throughout the Bonanza Experimental Research Forest.</p>
+<p><em>Credit: Long Term Ecological Research Network</em></p>
+<pre class="r"><code># attach packages and read in data
+library(tidyverse)
+library(purrr)
+library(dplyr)
+library(lubridate)
+library(tidyr)
+library(car)
+library(ggbeeswarm)
+library(effsize)
+library(kableExtra)
+library(janitor)
+library(ggbeeswarm)
+library(broom)
+hare &lt;- read_csv((&quot;showshoe_lter.csv&quot;), na= &quot;0&quot;)</code></pre>
+</div>
+<div id="results" class="section level3">
+<h3>Results</h3>
+<pre class="r"><code># select data I&#39;m interested in working with (adult males) and drop na values
+hare_am &lt;- hare %&gt;% 
+  select(date, weight, age, sex) %&gt;% 
+  drop_na() %&gt;% 
+  filter(age == &quot;a&quot;| age == &quot;A&quot;) %&gt;% 
+  filter(sex == &quot;m&quot;| sex == &quot;M&quot;)</code></pre>
+<pre class="r"><code># specify dates just by month
+hare_month &lt;- hare_am %&gt;% 
+  mutate(date_new = lubridate::mdy(date)) %&gt;% 
+  mutate(month = lubridate::month(date_new, label = TRUE)) %&gt;% 
+  select(weight, month) </code></pre>
+<pre class="r"><code># sort data by seasons
+hare_seasons&lt;- hare_month %&gt;% 
+  mutate(season = dplyr::case_when(month %in% c(&quot;Jan&quot;, &quot;Feb&quot;, &quot;Dec&quot;) ~ &quot;winter&quot;,
+                   month %in% c(&quot;Sep&quot;, &quot;Oct&quot;, &quot;Nov&quot;) ~ &quot;fall&quot;,
+                   month  %in% c(&quot;Jun&quot;, &quot;Jul&quot;, &quot;Aug&quot;) ~ &quot;summer&quot;,
+                   month  %in% c(&quot;Mar&quot;, &quot;Apr&quot;, &quot;May&quot;) ~ &quot;spring&quot;)) %&gt;% 
+  select(weight, season)</code></pre>
+<pre class="r"><code># calculate summary statistics
+hare_summary &lt;- hare_seasons %&gt;% 
+  group_by(season) %&gt;% 
+  summarize(mean_weight = round(mean(weight),1),
+            median= round(median(weight),1),
+            sd_weight = round(sd(weight),1),
+            sample_n = n(),
+            se_weight = round(sd(weight, na.rm = TRUE) / sqrt(n()),1),
+            var_weight = var(weight, na.rm = TRUE))</code></pre>
+<pre class="r"><code># make graph visualizing adult male snowshoe hare weights by season and customize
+ggplot()+
+geom_beeswarm (data = hare_seasons, aes(x = season, y = weight), size = 1, alpha = .5,pch = 16, color = &quot;#4D6483&quot;)+
+scale_x_discrete (labels = c(&quot;Fall&quot;, &quot;Spring&quot;, &quot;Summer&quot;, &quot;Winter&quot;))+
+labs(x = &quot;Season&quot;, y = &quot; Weight (Grams)&quot;, title = &quot;Snowshoe Hare Weights by Season \n Adult Males (1999-2012)&quot;)+
+geom_point(data = hare_summary, aes(x=season, y= mean_weight), color = &quot;maroon&quot;, size = 2.5)+
+geom_point(data = hare_summary, aes(x=season, y= median), color = &quot;blue&quot;, size = 1.5, alpha = .7)+
+geom_errorbar(data = hare_summary, 
+                aes(x = season, 
+                    ymin = mean_weight - sd_weight,
+                    ymax = mean_weight + sd_weight),
+                color = &quot;#612F62&quot;,
+                width = 0.09) +
+  theme_light()+
+  theme(plot.title = element_text(hjust= 0.5,
+                                  face = &quot;bold&quot;,
+                                  size = 16,
+                                  margin=margin(0,0,10,0)))+
+  theme(axis.title.x = element_text (face = &quot;bold&quot;,
+                                     size = 14,
+                                     margin=margin(10,0,0,0))) +
+  theme(axis.title.y = element_text (face = &quot;bold&quot;,
+                                     size = 14,
+                                     margin=margin(0,10,0,0)))+
+  scale_y_continuous(limits=c(0,2250), breaks = seq(0,2250, by=250), expand = c(0,0))+
+  theme(panel.background = element_rect(colour = &quot;black&quot;, size=1))+
+  theme(panel.grid.minor = element_blank())</code></pre>
+<p><img src="/project/project_one/project_one_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p><strong>Figure 1: Seasonal weight differences, excluding Winter, in adult male Snowshoe hares (1999-2012).</strong> Gray points indicate individual hare weights, measured in grams. Maroon points indicate sample means, and error bars indicate ± standard deviation. Median sample weights are indicated by smaller blue points. Data Source: <a href="https://portal.lternet.edu/nis/metadataviewer?packageid=knb-lter-bnz.55.22">Snowshoe hare physical data in Bonanza Creek Experimental Forest: 1999-Present</a></p>
+<p><strong>Table 1: Adult male snowshoe hare size metrics</strong></p>
+<pre class="r"><code># make table of summary statistics (grouped by season)
+hare_table &lt;-hare_summary %&gt;% 
+  select(-se_weight) %&gt;% 
+  select(-var_weight)
+
+  hare_table %&gt;% 
+    kable(col.names = c(&quot;Season&quot;, 
+                      &quot;Mean Weight (grams)&quot;,
+                      &quot;Median Weight (grams)&quot;,
+                      &quot;Standard Deviation&quot;,
+                      &quot;Sample Size&quot;)) %&gt;% 
+  kable_styling(bootstrap_options = &quot;bordered&quot;, 
+                full_width = F,
+                position = &quot;left&quot;) %&gt;% 
+  row_spec(1, background = &quot;#C3C7CC&quot;) %&gt;% 
+  row_spec(3, background = &quot;#C3C7CC&quot;) %&gt;% 
+  row_spec(2, background = &quot;#F1F2F3&quot;)</code></pre>
+<table class="table table-bordered" style="width: auto !important; ">
+<thead>
+<tr>
+<th style="text-align:left;">
+Season
+</th>
+<th style="text-align:right;">
+Mean Weight (grams)
+</th>
+<th style="text-align:right;">
+Median Weight (grams)
+</th>
+<th style="text-align:right;">
+Standard Deviation
+</th>
+<th style="text-align:right;">
+Sample Size
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;background-color: #C3C7CC !important;">
+fall
+</td>
+<td style="text-align:right;background-color: #C3C7CC !important;">
+1588.4
+</td>
+<td style="text-align:right;background-color: #C3C7CC !important;">
+1620
+</td>
+<td style="text-align:right;background-color: #C3C7CC !important;">
+134.9
+</td>
+<td style="text-align:right;background-color: #C3C7CC !important;">
+92
+</td>
+</tr>
+<tr>
+<td style="text-align:left;background-color: #F1F2F3 !important;">
+spring
+</td>
+<td style="text-align:right;background-color: #F1F2F3 !important;">
+1492.6
+</td>
+<td style="text-align:right;background-color: #F1F2F3 !important;">
+1500
+</td>
+<td style="text-align:right;background-color: #F1F2F3 !important;">
+110.4
+</td>
+<td style="text-align:right;background-color: #F1F2F3 !important;">
+55
+</td>
+</tr>
+<tr>
+<td style="text-align:left;background-color: #C3C7CC !important;">
+summer
+</td>
+<td style="text-align:right;background-color: #C3C7CC !important;">
+1372.4
+</td>
+<td style="text-align:right;background-color: #C3C7CC !important;">
+1350
+</td>
+<td style="text-align:right;background-color: #C3C7CC !important;">
+213.5
+</td>
+<td style="text-align:right;background-color: #C3C7CC !important;">
+151
+</td>
+</tr>
+</tbody>
+</table>
+<p>The average mean and median weights of adult male snowshoe hares differ seasonally. Data collected during the fall, spring, and summer months illustrate that on average, adult male hares are the heaviest in fall and weigh the least throughout summer (Figure 1). These trends hold true for both mean and median weight measurements. On average, adult male hares weigh 95.8 grams more in the fall than in the spring, and 216 grams more in the fall than in the summer based on mean measurements. Median weights differ by 120 grams between fall and spring, and 270 grams between fall and summer (Table 1).</p>
+</div>
+<div id="references" class="section level3">
+<h3>References</h3>
+<p><strong>Alaska Department of Fish and Game</strong> “Snowshoe Hare Species Profile, Alaska Department of Fish and Game.” Snowshoe Hare (Lepus Americanus), www.adfg.alaska.gov/index.cfm?adfg=snowshoehare.main.</p>
+<p><strong>Kielland K., F. S. Chapin, R. W. Ruess.</strong> 2017. Snowshoe hare physical data in Bonanza Creek Experimental Forest: 1999-Present. Environmental Data Initiative. <a href="https://doi.org/10.6073/pasta/03dce4856d79b91557d8e6ce2cbcdc14" class="uri">https://doi.org/10.6073/pasta/03dce4856d79b91557d8e6ce2cbcdc14</a>.</p>
+</div>
