@@ -1,0 +1,176 @@
+---
+title: "project_three"
+author: "Leana Goetze"
+date: "3/6/2020"
+output: html_document
+---
+
+
+
+<div id="introduction" class="section level3">
+<h3>Introduction</h3>
+<p>This project explores Steelhead fish use of the Bonneville Dam. Steelhead Trout are a migratory fish species, often migrating between the ocean and freshwater sources many times throughout their life. Steelhead trout are born in freshwater and migrate to the ocean before reaching adulthood. Later in life, these fish will migrate up the same river in which they were born to spawn (FWS). Human disturbances to the natural ecosystem, including the creation and modification of dams, are one of the many threats to Steelhead populations (Center for Biological Diversity). The Bonneville dam, located between Oregon and Washington, is complete with a 70 foot fish ladder which allows for the safe passage of fish through the dam (Northwest Power and Conservation Council). This project explores the daily, monthly, and annual counts of Steelhead Trout observed passing through the Bonneville dam from 1939-2019. Data provided by <a href="http://www.cbr.washington.edu/dart/query/adult_graph_text">Columbia River Research</a>.</p>
+<center>
+<pre class="r"><code>knitr::include_graphics(&#39;/images/Rainbow_trout.png&#39;)</code></pre>
+<p><img src="/images/Rainbow_trout.png" /><!-- --></p>
+</center>
+<p>Credit: Duane Raver</p>
+</div>
+<div id="results" class="section level3">
+<h3>Results</h3>
+<pre class="r"><code># Attach libraries and read in data
+library(tidyverse)</code></pre>
+<pre><code>## ── Attaching packages ────────────────────────────────────────────────── tidyverse 1.2.1 ──</code></pre>
+<pre><code>## ✓ ggplot2 3.2.1     ✓ purrr   0.3.3
+## ✓ tibble  2.1.3     ✓ dplyr   0.8.4
+## ✓ tidyr   1.0.0     ✓ stringr 1.4.0
+## ✓ readr   1.3.1     ✓ forcats 0.4.0</code></pre>
+<pre><code>## ── Conflicts ───────────────────────────────────────────────────── tidyverse_conflicts() ──
+## x dplyr::filter() masks stats::filter()
+## x dplyr::lag()    masks stats::lag()</code></pre>
+<pre class="r"><code>library(tsibble)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;tsibble&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:dplyr&#39;:
+## 
+##     id</code></pre>
+<pre class="r"><code>library(fable)</code></pre>
+<pre><code>## Loading required package: fabletools</code></pre>
+<pre class="r"><code>library(fabletools)
+library(feasts)
+library(forecast)</code></pre>
+<pre><code>## Registered S3 method overwritten by &#39;quantmod&#39;:
+##   method            from
+##   as.zoo.data.frame zoo</code></pre>
+<pre><code>## Registered S3 methods overwritten by &#39;forecast&#39;:
+##   method             from    
+##   fitted.fracdiff    fracdiff
+##   residuals.fracdiff fracdiff</code></pre>
+<pre><code>## 
+## Attaching package: &#39;forecast&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:fabletools&#39;:
+## 
+##     GeomForecast, StatForecast</code></pre>
+<pre class="r"><code>library(janitor)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;janitor&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:stats&#39;:
+## 
+##     chisq.test, fisher.test</code></pre>
+<pre class="r"><code>steelhead &lt;- read_csv(&quot;cbr_fish_passage_bonneville_allyrs_steelhead.csv&quot;)</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   year = col_double(),
+##   `mm-dd` = col_character(),
+##   location = col_character(),
+##   parameter = col_character(),
+##   unit = col_character(),
+##   datatype = col_character(),
+##   value = col_double()
+## )</code></pre>
+<pre class="r"><code># wrangle to get dates in various formats
+steelhead_date &lt;- steelhead %&gt;% 
+  clean_names() %&gt;% 
+  separate(mm_dd, into = c(&quot;day&quot;,&quot;month_abb&quot;), sep = &quot;-&quot;) %&gt;% 
+  mutate (month = match(month_abb,month.abb)) 
+
+steelhead_date$new_date &lt;-lubridate::ymd(paste(steelhead_date$year, steelhead_date$month, steelhead_date$day, sep=&quot;-&quot;)) </code></pre>
+<pre><code>## Warning: 61 failed to parse.</code></pre>
+<pre class="r"><code>steelhead_date_2 &lt;- steelhead_date %&gt;%
+  drop_na(new_date, value) %&gt;% 
+  mutate(month_sep = yearmonth(new_date)) %&gt;% 
+  mutate(value = as.numeric(value)) %&gt;% 
+  drop_na(month_sep, value) %&gt;% 
+  mutate(month_new = lubridate::month(new_date, label = TRUE))
+
+# view(steelhead_date_2)
+
+steelhead_mmdd &lt;- steelhead %&gt;% 
+  clean_names() %&gt;% 
+  rename(month_date = mm_dd)
+
+steelhead_final &lt;- steelhead_date_2 %&gt;% 
+  select(location:value,new_date:month_new) %&gt;% 
+  mutate(year = lubridate::year(new_date))</code></pre>
+<pre class="r"><code># ONE: Time series of original observations (daily)
+ggplot(data = steelhead_final, aes(x = new_date, y = value)) +
+  geom_line(color = &quot;blue&quot;)+
+  theme_minimal()+
+  labs(x = &quot;Date&quot;, y = &quot;Daily Fish Counts&quot;, title = &quot;Daily Steelhead Passage \n Through the Bonneville Dam (1939-2019)&quot;) +
+  theme(plot.title = element_text(hjust= 0.5,
+                                  face = &quot;bold&quot;,
+                                  size = 16,
+                                  margin=margin(0,0,10,0)))+
+  theme(axis.title.x = element_text (face = &quot;bold&quot;,
+                                     size = 14,
+                                     margin=margin(10,0,0,0))) +
+  theme(axis.title.y = element_text (face = &quot;bold&quot;,
+                                     size = 14,
+                                     margin=margin(0,10,0,0)))</code></pre>
+<p><img src="/project/project_three/project_three_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p><strong>Figure 1: Daily Steelhead Trout counts at the Bonneville Dam.</strong> Daily observations obtains from January 1st, 1939 through December 31st, 2019. Data: Columbia River Research.</p>
+<p>Large daily variations in Steelhead Trout counts exist at the Bonneville Dam between 1939-2019. The highest daily recorded fish count was 34,053 fish in one day, while no fish were observed on other days.</p>
+<pre class="r"><code># TWO: Time series of seasonplot (monthly)
+steelhead_monthly &lt;- steelhead_final %&gt;% 
+  group_by(month_new, year) %&gt;% 
+  summarize(month_sum = sum(value))
+
+ggplot(steelhead_monthly, aes(x = month_new, y = month_sum, group = year)) +
+  geom_line(aes(color = year)) +
+  labs(x = &quot;Month&quot;, y = &quot;Monthly Fish Counts&quot;, title =&quot;Total Monthly Steelhead Passage \n Through the Bonneville Dam (by Year)&quot;)+
+  theme_minimal() +
+  scale_y_continuous(labels = scales::comma)+
+  theme(plot.title = element_text(hjust= 0.5,
+                                  face = &quot;bold&quot;,
+                                  size = 16,
+                                  margin=margin(0,0,10,0)))+
+  theme(axis.title.x = element_text (face = &quot;bold&quot;,
+                                     size = 14,
+                                     margin=margin(10,0,0,0))) +
+  theme(axis.title.y = element_text (face = &quot;bold&quot;,
+                                     size = 14,
+                                     margin=margin(0,10,0,0)))+
+  scale_color_gradient(low=&#39;#66D367&#39;, high=&#39;#4371CC&#39;)</code></pre>
+<p><img src="/project/project_three/project_three_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p><strong>Figure 2: Monthly Steelhead Trout counts at the Bonneville Dam.</strong> Fish counts obtained daily and totaled together to obtain monthly counts. Earlier observations represented by green lines, while later years are in blue. Data: Columbia River Research</p>
+<p>Observations of Steelhead Trout populations at the Bonneville dam appear to follow similar monthly trends across the years. While very few fish are observed between January-May and October-November, fish counts have drastically increased during June-September months during all recorded years. It appears that monthly fish counts are greatest in August, possibly suggesting yearly migration patterns.</p>
+<pre class="r"><code># THREE: Time series of annual steelhead counts
+
+
+steelhead_annual &lt;- steelhead_final %&gt;% 
+  group_by(year) %&gt;% 
+  summarize(annual_sum = sum(value))
+
+# using tsibble:
+# annual_ts &lt;- as_tsibble(steelhead_annual, index = year)
+# annual_ts %&gt;% autoplot(annual_sum) # I&#39;ll graph in ggplot instead
+# annual_ts %&gt;% gg_subseries(annual_sum) # does not work
+# annual_ts %&gt;% gg_season(annual_sum) # does not work
+
+ggplot(data = steelhead_annual, aes(x = year, y = annual_sum)) +
+  geom_line(color = &quot;maroon&quot;) +
+  theme_minimal()+
+  labs(x = &quot;Year&quot;, y = &quot;Annual Fish Counts&quot;, title = &quot;Total Annual Steelhead Passage \n Through the Bonneville Dam&quot;)+
+  theme(plot.title = element_text(hjust= 0.5,
+                                  face = &quot;bold&quot;,
+                                  size = 16,
+                                  margin=margin(0,0,10,0)))+
+  theme(axis.title.x = element_text (face = &quot;bold&quot;,
+                                     size = 14,
+                                     margin=margin(10,0,0,0))) +
+  theme(axis.title.y = element_text (face = &quot;bold&quot;,
+                                     size = 14,
+                                     margin=margin(0,10,0,0)))+
+  scale_color_gradient(low=&#39;#6CE98E&#39;, high=&#39;#5072DF&#39;)+
+  scale_y_continuous(labels = scales::comma)</code></pre>
+<p><img src="/project/project_three/project_three_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p><strong>Figure 3: Annual Steelhead Trout counts at the Bonneville Dam.</strong> Yearly totals obtained from 1939-2019. Data: Columbia River Research</p>
+<p>It appears that while there are significant yearly fluctuations in Steelhead Trout populations traveling through the Bonneville dam, annual Steelhead Trout counts are generally increasing over time. Most notable, very large increases in Steelhead Trout populations were observed in 2001 and 2009. These dramatic increases were rapidly followed by a decline in fish by the following year.</p>
+</div>
+<div id="references" class="section level3">
+<h3>References</h3>
+<p>Columbia River DART, Columbia Basin Research, University of Washington. (2019). Adult Passage Graphics &amp; Text. Available from <a href="http://www.cbr.washington.edu/dart/query/adult_graph_text" class="uri">http://www.cbr.washington.edu/dart/query/adult_graph_text</a></p>
+<p>“Dams: Impacts on Salmon and Steelhead.” Northwest Power and Conservation Council, www.nwcouncil.org/reports/columbia-river-history/damsimpacts.</p>
+<p>“Natural History: CENTRAL CALIFORNIA COAST STEELHEAD TROUT.” Center for Biological Diversity, www.biologicaldiversity.org/species/fish/central_California_coast_steelhead_trout/natural_history.html.</p>
+<p>U.S. Fish and Wildlife Service/Fish and Aquatic Conservation. “Steelhead Trout.” Official Web Page of the U S Fish and Wildlife Service, www.fws.gov/fisheries/fishmigration/steelhead_trout.html.</p>
+</div>

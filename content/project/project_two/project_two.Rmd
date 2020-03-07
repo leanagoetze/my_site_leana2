@@ -1,0 +1,93 @@
+---
+title: "project_two"
+author: "Leana Goetze"
+date: "3/6/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+<center>
+```{r}
+knitr::include_graphics('/images/fastfood.jpg')
+```
+
+</center>
+Credit: [freepik](https://www.freepik.com)
+
+### Introduction
+This report explores the relationship between nutrients present in sampled fast foods. The nutritional content of 371 common fast food items were analyzed, using 11 common nutritional measures for comparison. This report will explore which nutrients, if any, were positively and negatively correlated to one another. Data for this project provided USDA (National Nutrient Database), now [FoodData Central](https://fdc.nal.usda.gov/index.html)
+```{r}
+# read in data and attach packages
+library(tidyverse)
+library(janitor)
+library(ggfortify)
+
+food <- read_csv("usda_nutrients.csv") %>% 
+  clean_names() 
+
+```
+
+```{r}
+#Select data of interest, drop na values, rename columes
+food_filtered <- food %>% 
+  filter(food_group == "Fast Foods") %>% 
+  select(protein_g: fiber_g, energy_kcal, vit_a_mcg:vit_e_mg) %>% 
+  drop_na() %>% 
+  rename(Energy = energy_kcal) %>% 
+  rename(Protein = protein_g) %>% 
+  rename(Fat = fat_g) %>% 
+  rename(Carbohydrates = carb_g) %>% 
+  rename(Sugar = sugar_g) %>% 
+  rename(Fiber = fiber_g) %>% 
+  rename(VitA = vit_a_mcg) %>% 
+  rename(VitB6 = vit_b6_mg) %>% 
+  rename(VitB12 = vit_b12_mcg) %>% 
+  rename(VitC = vit_c_mg) %>% 
+  rename(VitE = vit_e_mg)  
+```
+
+```{r}
+# Run principal component analysis on selected variables
+food_pca <- prcomp(food_filtered, scale = TRUE)
+#summary(food_pca)
+
+#plot(food_pca)
+#biplot(food_pca)
+```
+
+```{r}
+# Create a biplot of results and add customizations
+food_biplot <- autoplot(food_pca, 
+                      colour = NA,
+                      loadings.label = TRUE,
+                      loadings.label.size = 3,
+                      loadings.label.colour = "black",
+                      loadings.colour='maroon',
+                      loadings.label.repel = TRUE) +
+  theme_minimal()+
+  labs(x= "Principal Component 1", y = "Principal Component 2", title = "Fast Food Nutrition")+
+  theme(plot.title = element_text(hjust= 0.5,
+                                  face = "bold",
+                                  size = 16,
+                                  margin=margin(0,0,10,0)))+
+  theme(axis.title.x = element_text (face = "bold",
+                                     size = 14,
+                                     margin=margin(10,0,0,0))) +
+  theme(axis.title.y = element_text (face = "bold",
+                                     size = 14,
+                                     margin=margin(0,10,0,0)))
+food_biplot
+```
+
+**Figure 1: Principal component analysis: fast food nutritional content.** Analyis performed on 371 common fast food items. Smaller angles between variables (maroon arrows) indicate highly correlated nutrients, such as carbohydrates and fiber. Variance of the variables are represented by arrow length, with longer lengths representing larger variances.
+
+### Summary
+- Carbohydrates and fiber in fast foods are highly positively correlated. Protein, vitamin B12 and vitamin B6 appear to be positively correlated as well.
+
+- Protein and sugar in fast foods are negatively correlated (as one increases, the other decreases). 
+
+- Many components of fast foods appear to be uncorrelated, including vtiamin E and protein, energy and vitamin B12, fiber and fat, and sugar and vitamin E.
+

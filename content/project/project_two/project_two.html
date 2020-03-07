@@ -1,0 +1,103 @@
+---
+title: "project_two"
+author: "Leana Goetze"
+date: "3/6/2020"
+output: html_document
+---
+
+
+
+<center>
+<pre class="r"><code>knitr::include_graphics(&#39;/images/fastfood.jpg&#39;)</code></pre>
+<p><img src="/images/fastfood.jpg" /><!-- --></p>
+</center>
+<p>Credit: <a href="https://www.freepik.com">freepik</a></p>
+<div id="introduction" class="section level3">
+<h3>Introduction</h3>
+<p>This report explores the relationship between nutrients present in sampled fast foods. The nutritional content of 371 common fast food items were analyzed, using 11 common nutritional measures for comparison. This report will explore which nutrients, if any, were positively and negatively correlated to one another. Data for this project provided USDA (National Nutrient Database), now <a href="https://fdc.nal.usda.gov/index.html">FoodData Central</a></p>
+<pre class="r"><code># read in data and attach packages
+library(tidyverse)</code></pre>
+<pre><code>## ── Attaching packages ────────────────────────────────────────────────── tidyverse 1.2.1 ──</code></pre>
+<pre><code>## ✓ ggplot2 3.2.1     ✓ purrr   0.3.3
+## ✓ tibble  2.1.3     ✓ dplyr   0.8.4
+## ✓ tidyr   1.0.0     ✓ stringr 1.4.0
+## ✓ readr   1.3.1     ✓ forcats 0.4.0</code></pre>
+<pre><code>## ── Conflicts ───────────────────────────────────────────────────── tidyverse_conflicts() ──
+## x dplyr::filter() masks stats::filter()
+## x dplyr::lag()    masks stats::lag()</code></pre>
+<pre class="r"><code>library(janitor)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;janitor&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:stats&#39;:
+## 
+##     chisq.test, fisher.test</code></pre>
+<pre class="r"><code>library(ggfortify)
+
+food &lt;- read_csv(&quot;usda_nutrients.csv&quot;) %&gt;% 
+  clean_names() </code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   FoodGroup = col_character(),
+##   ShortDescrip = col_character(),
+##   Descrip = col_character(),
+##   CommonName = col_character(),
+##   MfgName = col_character(),
+##   ScientificName = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre class="r"><code>#Select data of interest, drop na values, rename columes
+food_filtered &lt;- food %&gt;% 
+  filter(food_group == &quot;Fast Foods&quot;) %&gt;% 
+  select(protein_g: fiber_g, energy_kcal, vit_a_mcg:vit_e_mg) %&gt;% 
+  drop_na() %&gt;% 
+  rename(Energy = energy_kcal) %&gt;% 
+  rename(Protein = protein_g) %&gt;% 
+  rename(Fat = fat_g) %&gt;% 
+  rename(Carbohydrates = carb_g) %&gt;% 
+  rename(Sugar = sugar_g) %&gt;% 
+  rename(Fiber = fiber_g) %&gt;% 
+  rename(VitA = vit_a_mcg) %&gt;% 
+  rename(VitB6 = vit_b6_mg) %&gt;% 
+  rename(VitB12 = vit_b12_mcg) %&gt;% 
+  rename(VitC = vit_c_mg) %&gt;% 
+  rename(VitE = vit_e_mg)  </code></pre>
+<pre class="r"><code># Run principal component analysis on selected variables
+food_pca &lt;- prcomp(food_filtered, scale = TRUE)
+#summary(food_pca)
+
+#plot(food_pca)
+#biplot(food_pca)</code></pre>
+<pre class="r"><code># Create a biplot of results and add customizations
+food_biplot &lt;- autoplot(food_pca, 
+                      colour = NA,
+                      loadings.label = TRUE,
+                      loadings.label.size = 3,
+                      loadings.label.colour = &quot;black&quot;,
+                      loadings.colour=&#39;maroon&#39;,
+                      loadings.label.repel = TRUE) +
+  theme_minimal()+
+  labs(x= &quot;Principal Component 1&quot;, y = &quot;Principal Component 2&quot;, title = &quot;Fast Food Nutrition&quot;)+
+  theme(plot.title = element_text(hjust= 0.5,
+                                  face = &quot;bold&quot;,
+                                  size = 16,
+                                  margin=margin(0,0,10,0)))+
+  theme(axis.title.x = element_text (face = &quot;bold&quot;,
+                                     size = 14,
+                                     margin=margin(10,0,0,0))) +
+  theme(axis.title.y = element_text (face = &quot;bold&quot;,
+                                     size = 14,
+                                     margin=margin(0,10,0,0)))
+food_biplot</code></pre>
+<pre><code>## Warning: Removed 371 rows containing missing values (geom_point).</code></pre>
+<p><img src="/project/project_two/project_two_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p><strong>Figure 1: Principal component analysis: fast food nutritional content.</strong> Analyis performed on 371 common fast food items. Smaller angles between variables (maroon arrows) indicate highly correlated nutrients, such as carbohydrates and fiber. Variance of the variables are represented by arrow length, with longer lengths representing larger variances.</p>
+</div>
+<div id="summary" class="section level3">
+<h3>Summary</h3>
+<ul>
+<li><p>Carbohydrates and fiber in fast foods are highly positively correlated. Protein, vitamin B12 and vitamin B6 appear to be positively correlated as well.</p></li>
+<li><p>Protein and sugar in fast foods are negatively correlated (as one increases, the other decreases).</p></li>
+<li><p>Many components of fast foods appear to be uncorrelated, including vtiamin E and protein, energy and vitamin B12, fiber and fat, and sugar and vitamin E.</p></li>
+</ul>
+</div>

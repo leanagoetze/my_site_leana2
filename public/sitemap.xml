@@ -210,4 +210,12 @@
     <loc>/project/project_one/project_one/</loc>
   </url>
   
+  <url>
+    <loc>/project/project_three/project_three/</loc>
+  </url>
+  
+  <url>
+    <loc>/project/project_two/project_two/</loc>
+  </url>
+  
 </urlset>

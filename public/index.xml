@@ -906,5 +906,288 @@ summer
 </description>
     </item>
     
+    <item>
+      <title>project_three</title>
+      <link>/project/project_three/project_three/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>/project/project_three/project_three/</guid>
+      <description>
+
+
+&lt;div id=&#34;introduction&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Introduction&lt;/h3&gt;
+&lt;p&gt;This project explores Steelhead fish use of the Bonneville Dam. Steelhead Trout are a migratory fish species, often migrating between the ocean and freshwater sources many times throughout their life. Steelhead trout are born in freshwater and migrate to the ocean before reaching adulthood. Later in life, these fish will migrate up the same river in which they were born to spawn (FWS). Human disturbances to the natural ecosystem, including the creation and modification of dams, are one of the many threats to Steelhead populations (Center for Biological Diversity). The Bonneville dam, located between Oregon and Washington, is complete with a 70 foot fish ladder which allows for the safe passage of fish through the dam (Northwest Power and Conservation Council). This project explores the daily, monthly, and annual counts of Steelhead Trout observed passing through the Bonneville dam from 1939-2019. Data provided by &lt;a href=&#34;http://www.cbr.washington.edu/dart/query/adult_graph_text&#34;&gt;Columbia River Research&lt;/a&gt;.&lt;/p&gt;
+&lt;center&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;knitr::include_graphics(&amp;#39;/images/Rainbow_trout.png&amp;#39;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/images/Rainbow_trout.png&#34; /&gt;&lt;!-- --&gt;&lt;/p&gt;
+&lt;/center&gt;
+&lt;p&gt;Credit: Duane Raver&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;results&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Results&lt;/h3&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Attach libraries and read in data
+library(tidyverse)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## ── Attaching packages ────────────────────────────────────────────────── tidyverse 1.2.1 ──&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## ✓ ggplot2 3.2.1     ✓ purrr   0.3.3
+## ✓ tibble  2.1.3     ✓ dplyr   0.8.4
+## ✓ tidyr   1.0.0     ✓ stringr 1.4.0
+## ✓ readr   1.3.1     ✓ forcats 0.4.0&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## ── Conflicts ───────────────────────────────────────────────────── tidyverse_conflicts() ──
+## x dplyr::filter() masks stats::filter()
+## x dplyr::lag()    masks stats::lag()&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(tsibble)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## 
+## Attaching package: &amp;#39;tsibble&amp;#39;&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## The following object is masked from &amp;#39;package:dplyr&amp;#39;:
+## 
+##     id&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(fable)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## Loading required package: fabletools&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(fabletools)
+library(feasts)
+library(forecast)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## Registered S3 method overwritten by &amp;#39;quantmod&amp;#39;:
+##   method            from
+##   as.zoo.data.frame zoo&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## Registered S3 methods overwritten by &amp;#39;forecast&amp;#39;:
+##   method             from    
+##   fitted.fracdiff    fracdiff
+##   residuals.fracdiff fracdiff&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## 
+## Attaching package: &amp;#39;forecast&amp;#39;&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## The following objects are masked from &amp;#39;package:fabletools&amp;#39;:
+## 
+##     GeomForecast, StatForecast&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(janitor)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## 
+## Attaching package: &amp;#39;janitor&amp;#39;&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## The following objects are masked from &amp;#39;package:stats&amp;#39;:
+## 
+##     chisq.test, fisher.test&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;steelhead &amp;lt;- read_csv(&amp;quot;cbr_fish_passage_bonneville_allyrs_steelhead.csv&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## Parsed with column specification:
+## cols(
+##   year = col_double(),
+##   `mm-dd` = col_character(),
+##   location = col_character(),
+##   parameter = col_character(),
+##   unit = col_character(),
+##   datatype = col_character(),
+##   value = col_double()
+## )&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# wrangle to get dates in various formats
+steelhead_date &amp;lt;- steelhead %&amp;gt;% 
+  clean_names() %&amp;gt;% 
+  separate(mm_dd, into = c(&amp;quot;day&amp;quot;,&amp;quot;month_abb&amp;quot;), sep = &amp;quot;-&amp;quot;) %&amp;gt;% 
+  mutate (month = match(month_abb,month.abb)) 
+
+steelhead_date$new_date &amp;lt;-lubridate::ymd(paste(steelhead_date$year, steelhead_date$month, steelhead_date$day, sep=&amp;quot;-&amp;quot;)) &lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## Warning: 61 failed to parse.&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;steelhead_date_2 &amp;lt;- steelhead_date %&amp;gt;%
+  drop_na(new_date, value) %&amp;gt;% 
+  mutate(month_sep = yearmonth(new_date)) %&amp;gt;% 
+  mutate(value = as.numeric(value)) %&amp;gt;% 
+  drop_na(month_sep, value) %&amp;gt;% 
+  mutate(month_new = lubridate::month(new_date, label = TRUE))
+
+# view(steelhead_date_2)
+
+steelhead_mmdd &amp;lt;- steelhead %&amp;gt;% 
+  clean_names() %&amp;gt;% 
+  rename(month_date = mm_dd)
+
+steelhead_final &amp;lt;- steelhead_date_2 %&amp;gt;% 
+  select(location:value,new_date:month_new) %&amp;gt;% 
+  mutate(year = lubridate::year(new_date))&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# ONE: Time series of original observations (daily)
+ggplot(data = steelhead_final, aes(x = new_date, y = value)) +
+  geom_line(color = &amp;quot;blue&amp;quot;)+
+  theme_minimal()+
+  labs(x = &amp;quot;Date&amp;quot;, y = &amp;quot;Daily Fish Counts&amp;quot;, title = &amp;quot;Daily Steelhead Passage \n Through the Bonneville Dam (1939-2019)&amp;quot;) +
+  theme(plot.title = element_text(hjust= 0.5,
+                                  face = &amp;quot;bold&amp;quot;,
+                                  size = 16,
+                                  margin=margin(0,0,10,0)))+
+  theme(axis.title.x = element_text (face = &amp;quot;bold&amp;quot;,
+                                     size = 14,
+                                     margin=margin(10,0,0,0))) +
+  theme(axis.title.y = element_text (face = &amp;quot;bold&amp;quot;,
+                                     size = 14,
+                                     margin=margin(0,10,0,0)))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/project/project_three/project_three_files/figure-html/unnamed-chunk-4-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Figure 1: Daily Steelhead Trout counts at the Bonneville Dam.&lt;/strong&gt; Daily observations obtains from January 1st, 1939 through December 31st, 2019. Data: Columbia River Research.&lt;/p&gt;
+&lt;p&gt;Large daily variations in Steelhead Trout counts exist at the Bonneville Dam between 1939-2019. The highest daily recorded fish count was 34,053 fish in one day, while no fish were observed on other days.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# TWO: Time series of seasonplot (monthly)
+steelhead_monthly &amp;lt;- steelhead_final %&amp;gt;% 
+  group_by(month_new, year) %&amp;gt;% 
+  summarize(month_sum = sum(value))
+
+ggplot(steelhead_monthly, aes(x = month_new, y = month_sum, group = year)) +
+  geom_line(aes(color = year)) +
+  labs(x = &amp;quot;Month&amp;quot;, y = &amp;quot;Monthly Fish Counts&amp;quot;, title =&amp;quot;Total Monthly Steelhead Passage \n Through the Bonneville Dam (by Year)&amp;quot;)+
+  theme_minimal() +
+  scale_y_continuous(labels = scales::comma)+
+  theme(plot.title = element_text(hjust= 0.5,
+                                  face = &amp;quot;bold&amp;quot;,
+                                  size = 16,
+                                  margin=margin(0,0,10,0)))+
+  theme(axis.title.x = element_text (face = &amp;quot;bold&amp;quot;,
+                                     size = 14,
+                                     margin=margin(10,0,0,0))) +
+  theme(axis.title.y = element_text (face = &amp;quot;bold&amp;quot;,
+                                     size = 14,
+                                     margin=margin(0,10,0,0)))+
+  scale_color_gradient(low=&amp;#39;#66D367&amp;#39;, high=&amp;#39;#4371CC&amp;#39;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/project/project_three/project_three_files/figure-html/unnamed-chunk-5-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Figure 2: Monthly Steelhead Trout counts at the Bonneville Dam.&lt;/strong&gt; Fish counts obtained daily and totaled together to obtain monthly counts. Earlier observations represented by green lines, while later years are in blue. Data: Columbia River Research&lt;/p&gt;
+&lt;p&gt;Observations of Steelhead Trout populations at the Bonneville dam appear to follow similar monthly trends across the years. While very few fish are observed between January-May and October-November, fish counts have drastically increased during June-September months during all recorded years. It appears that monthly fish counts are greatest in August, possibly suggesting yearly migration patterns.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# THREE: Time series of annual steelhead counts
+
+
+steelhead_annual &amp;lt;- steelhead_final %&amp;gt;% 
+  group_by(year) %&amp;gt;% 
+  summarize(annual_sum = sum(value))
+
+# using tsibble:
+# annual_ts &amp;lt;- as_tsibble(steelhead_annual, index = year)
+# annual_ts %&amp;gt;% autoplot(annual_sum) # I&amp;#39;ll graph in ggplot instead
+# annual_ts %&amp;gt;% gg_subseries(annual_sum) # does not work
+# annual_ts %&amp;gt;% gg_season(annual_sum) # does not work
+
+ggplot(data = steelhead_annual, aes(x = year, y = annual_sum)) +
+  geom_line(color = &amp;quot;maroon&amp;quot;) +
+  theme_minimal()+
+  labs(x = &amp;quot;Year&amp;quot;, y = &amp;quot;Annual Fish Counts&amp;quot;, title = &amp;quot;Total Annual Steelhead Passage \n Through the Bonneville Dam&amp;quot;)+
+  theme(plot.title = element_text(hjust= 0.5,
+                                  face = &amp;quot;bold&amp;quot;,
+                                  size = 16,
+                                  margin=margin(0,0,10,0)))+
+  theme(axis.title.x = element_text (face = &amp;quot;bold&amp;quot;,
+                                     size = 14,
+                                     margin=margin(10,0,0,0))) +
+  theme(axis.title.y = element_text (face = &amp;quot;bold&amp;quot;,
+                                     size = 14,
+                                     margin=margin(0,10,0,0)))+
+  scale_color_gradient(low=&amp;#39;#6CE98E&amp;#39;, high=&amp;#39;#5072DF&amp;#39;)+
+  scale_y_continuous(labels = scales::comma)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/project/project_three/project_three_files/figure-html/unnamed-chunk-6-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Figure 3: Annual Steelhead Trout counts at the Bonneville Dam.&lt;/strong&gt; Yearly totals obtained from 1939-2019. Data: Columbia River Research&lt;/p&gt;
+&lt;p&gt;It appears that while there are significant yearly fluctuations in Steelhead Trout populations traveling through the Bonneville dam, annual Steelhead Trout counts are generally increasing over time. Most notable, very large increases in Steelhead Trout populations were observed in 2001 and 2009. These dramatic increases were rapidly followed by a decline in fish by the following year.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;references&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;References&lt;/h3&gt;
+&lt;p&gt;Columbia River DART, Columbia Basin Research, University of Washington. (2019). Adult Passage Graphics &amp;amp; Text. Available from &lt;a href=&#34;http://www.cbr.washington.edu/dart/query/adult_graph_text&#34; class=&#34;uri&#34;&gt;http://www.cbr.washington.edu/dart/query/adult_graph_text&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;“Dams: Impacts on Salmon and Steelhead.” Northwest Power and Conservation Council, www.nwcouncil.org/reports/columbia-river-history/damsimpacts.&lt;/p&gt;
+&lt;p&gt;“Natural History: CENTRAL CALIFORNIA COAST STEELHEAD TROUT.” Center for Biological Diversity, www.biologicaldiversity.org/species/fish/central_California_coast_steelhead_trout/natural_history.html.&lt;/p&gt;
+&lt;p&gt;U.S. Fish and Wildlife Service/Fish and Aquatic Conservation. “Steelhead Trout.” Official Web Page of the U S Fish and Wildlife Service, www.fws.gov/fisheries/fishmigration/steelhead_trout.html.&lt;/p&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>project_two</title>
+      <link>/project/project_two/project_two/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>/project/project_two/project_two/</guid>
+      <description>
+
+
+&lt;center&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;knitr::include_graphics(&amp;#39;/images/fastfood.jpg&amp;#39;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/images/fastfood.jpg&#34; /&gt;&lt;!-- --&gt;&lt;/p&gt;
+&lt;/center&gt;
+&lt;p&gt;Credit: &lt;a href=&#34;https://www.freepik.com&#34;&gt;freepik&lt;/a&gt;&lt;/p&gt;
+&lt;div id=&#34;introduction&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Introduction&lt;/h3&gt;
+&lt;p&gt;This report explores the relationship between nutrients present in sampled fast foods. The nutritional content of 371 common fast food items were analyzed, using 11 common nutritional measures for comparison. This report will explore which nutrients, if any, were positively and negatively correlated to one another. Data for this project provided USDA (National Nutrient Database), now &lt;a href=&#34;https://fdc.nal.usda.gov/index.html&#34;&gt;FoodData Central&lt;/a&gt;&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# read in data and attach packages
+library(tidyverse)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## ── Attaching packages ────────────────────────────────────────────────── tidyverse 1.2.1 ──&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## ✓ ggplot2 3.2.1     ✓ purrr   0.3.3
+## ✓ tibble  2.1.3     ✓ dplyr   0.8.4
+## ✓ tidyr   1.0.0     ✓ stringr 1.4.0
+## ✓ readr   1.3.1     ✓ forcats 0.4.0&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## ── Conflicts ───────────────────────────────────────────────────── tidyverse_conflicts() ──
+## x dplyr::filter() masks stats::filter()
+## x dplyr::lag()    masks stats::lag()&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(janitor)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## 
+## Attaching package: &amp;#39;janitor&amp;#39;&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## The following objects are masked from &amp;#39;package:stats&amp;#39;:
+## 
+##     chisq.test, fisher.test&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(ggfortify)
+
+food &amp;lt;- read_csv(&amp;quot;usda_nutrients.csv&amp;quot;) %&amp;gt;% 
+  clean_names() &lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   FoodGroup = col_character(),
+##   ShortDescrip = col_character(),
+##   Descrip = col_character(),
+##   CommonName = col_character(),
+##   MfgName = col_character(),
+##   ScientificName = col_character()
+## )&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## See spec(...) for full column specifications.&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;#Select data of interest, drop na values, rename columes
+food_filtered &amp;lt;- food %&amp;gt;% 
+  filter(food_group == &amp;quot;Fast Foods&amp;quot;) %&amp;gt;% 
+  select(protein_g: fiber_g, energy_kcal, vit_a_mcg:vit_e_mg) %&amp;gt;% 
+  drop_na() %&amp;gt;% 
+  rename(Energy = energy_kcal) %&amp;gt;% 
+  rename(Protein = protein_g) %&amp;gt;% 
+  rename(Fat = fat_g) %&amp;gt;% 
+  rename(Carbohydrates = carb_g) %&amp;gt;% 
+  rename(Sugar = sugar_g) %&amp;gt;% 
+  rename(Fiber = fiber_g) %&amp;gt;% 
+  rename(VitA = vit_a_mcg) %&amp;gt;% 
+  rename(VitB6 = vit_b6_mg) %&amp;gt;% 
+  rename(VitB12 = vit_b12_mcg) %&amp;gt;% 
+  rename(VitC = vit_c_mg) %&amp;gt;% 
+  rename(VitE = vit_e_mg)  &lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Run principal component analysis on selected variables
+food_pca &amp;lt;- prcomp(food_filtered, scale = TRUE)
+#summary(food_pca)
+
+#plot(food_pca)
+#biplot(food_pca)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Create a biplot of results and add customizations
+food_biplot &amp;lt;- autoplot(food_pca, 
+                      colour = NA,
+                      loadings.label = TRUE,
+                      loadings.label.size = 3,
+                      loadings.label.colour = &amp;quot;black&amp;quot;,
+                      loadings.colour=&amp;#39;maroon&amp;#39;,
+                      loadings.label.repel = TRUE) +
+  theme_minimal()+
+  labs(x= &amp;quot;Principal Component 1&amp;quot;, y = &amp;quot;Principal Component 2&amp;quot;, title = &amp;quot;Fast Food Nutrition&amp;quot;)+
+  theme(plot.title = element_text(hjust= 0.5,
+                                  face = &amp;quot;bold&amp;quot;,
+                                  size = 16,
+                                  margin=margin(0,0,10,0)))+
+  theme(axis.title.x = element_text (face = &amp;quot;bold&amp;quot;,
+                                     size = 14,
+                                     margin=margin(10,0,0,0))) +
+  theme(axis.title.y = element_text (face = &amp;quot;bold&amp;quot;,
+                                     size = 14,
+                                     margin=margin(0,10,0,0)))
+food_biplot&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## Warning: Removed 371 rows containing missing values (geom_point).&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/project/project_two/project_two_files/figure-html/unnamed-chunk-5-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Figure 1: Principal component analysis: fast food nutritional content.&lt;/strong&gt; Analyis performed on 371 common fast food items. Smaller angles between variables (maroon arrows) indicate highly correlated nutrients, such as carbohydrates and fiber. Variance of the variables are represented by arrow length, with longer lengths representing larger variances.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;summary&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Summary&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Carbohydrates and fiber in fast foods are highly positively correlated. Protein, vitamin B12 and vitamin B6 appear to be positively correlated as well.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Protein and sugar in fast foods are negatively correlated (as one increases, the other decreases).&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Many components of fast foods appear to be uncorrelated, including vtiamin E and protein, energy and vitamin B12, fiber and fat, and sugar and vitamin E.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
   </channel>
 </rss>
