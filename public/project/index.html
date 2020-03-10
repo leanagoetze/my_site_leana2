@@ -599,7 +599,7 @@
   </div>
   
   <div>
-    <h2><a href="/project/project_one/project_one/">project_one</a></h2>
+    <h2><a href="/project/project_one/project_one/">Data Exploration and Visualization</a></h2>
     <div class="article-style">
       
       Introduction Snowshoe hares, Lepus americanus, can be found in boreal and upper montane forests across North America. Snowshoe hares are primarily herbivorous, eating a variety of flowers, grasses, and plants. In Alaska, hares depend more heavily on grasses and leaves in the summer months, and twigs and bark during the winter. This project aims to explore the seasonal weight distributions of snowhoe hare populations living throughout the Tanana valley in Alaska (Department of Fish and Game).
@@ -608,21 +608,31 @@
   </div>
   
   <div>
-    <h2><a href="/project/project_three/project_three/">project_three</a></h2>
+    <h2><a href="/project/project_two/project_two/">Principal Component Analysis</a></h2>
     <div class="article-style">
       
-      Introduction This project explores Steelhead fish use of the Bonneville Dam. Steelhead Trout are a migratory fish species, often migrating between the ocean and freshwater sources many times throughout their life. Steelhead trout are born in freshwater and migrate to the ocean before reaching adulthood. Later in life, these fish will migrate up the same river in which they were born to spawn (FWS). Human disturbances to the natural ecosystem, including the creation and modification of dams, are one of the many threats to Steelhead populations (Center for Biological Diversity).
+      knitr::include_graphics(&#39;/images/fastfood.jpg&#39;)  Credit: freepik
+Introduction This report explores the relationship between nutrients present in sampled fast foods. The nutritional content of 371 common fast food items were analyzed, using 11 common nutritional measures for comparison. This report will explore which nutrients, if any, were positively and negatively correlated to one another. Data for this project provided USDA (National Nutrient Database), now FoodData Central
+# read in data and attach packages library(tidyverse) ## ── Attaching packages ───────────────────────────────────────────────────────── tidyverse 1.
       
     </div>
   </div>
   
   <div>
-    <h2><a href="/project/project_two/project_two/">project_two</a></h2>
+    <h2><a href="/project/project_four/project_four/">project_four</a></h2>
     <div class="article-style">
       
-      knitr::include_graphics(&#39;/images/fastfood.jpg&#39;)  Credit: freepik
-Introduction This report explores the relationship between nutrients present in sampled fast foods. The nutritional content of 371 common fast food items were analyzed, using 11 common nutritional measures for comparison. This report will explore which nutrients, if any, were positively and negatively correlated to one another. Data for this project provided USDA (National Nutrient Database), now FoodData Central
-# read in data and attach packages library(tidyverse) ## ── Attaching packages ────────────────────────────────────────────────── tidyverse 1.
+      Land Cover Data made available by Hawaii Statewide GIS Program. Data measures the various land use types on the Hawaiian Islands. Watershed Data made available by Hawaii Statewide GIS Program. Data measures watershed characterisitics of the Hawaiian Islands.
+# attach packages library(tidyverse) library(sf) library(tmap) library(here) library(janitor) library(mapview) library(paletteer) # read in data land &lt;-read_sf(here(&quot;content&quot;,&quot;project&quot;,&quot;project_four&quot;,&quot;Land_Use_Land_Cover_LULC&quot;), layer = &quot;Land_Use_Land_Cover_LULC&quot;) %&gt;% clean_names() # select data of interest land_two &lt;- land %&gt;% select(landcover) # create an interactive map of land cover tmap_mode(&quot;view&quot;)+ tm_shape(land_two)+ tm_borders(&quot;white&quot;, lwd = .
+      
+    </div>
+  </div>
+  
+  <div>
+    <h2><a href="/project/project_three/project_three/">Time Series Analysis</a></h2>
+    <div class="article-style">
+      
+      Introduction This project explores Steelhead fish use of the Bonneville Dam. Steelhead Trout are a migratory fish species, often migrating between the ocean and freshwater sources many times throughout their life. Steelhead trout are born in freshwater and migrate to the ocean before reaching adulthood. Later in life, these fish will migrate up the same river in which they were born to spawn (FWS). Human disturbances to the natural ecosystem, including the creation and modification of dams, are one of the many threats to Steelhead populations (Center for Biological Diversity).
       
     </div>
   </div>

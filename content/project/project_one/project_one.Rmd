@@ -1,5 +1,5 @@
 ---
-title: "project_one"
+title: "Data Exploration and Visualization"
 author: "Leana Goetze"
 date: "3/6/2020"
 output: html_document

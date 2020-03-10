@@ -1,5 +1,5 @@
 ---
-title: "project_three"
+title: "Time Series Analysis"
 author: "Leana Goetze"
 date: "3/6/2020"
 output: html_document
@@ -127,7 +127,9 @@ steelhead_annual <- steelhead_final %>%
 # annual_ts %>% autoplot(annual_sum) # I'll graph in ggplot instead
 # annual_ts %>% gg_subseries(annual_sum) # does not work
 # annual_ts %>% gg_season(annual_sum) # does not work
+```
 
+```{r}
 ggplot(data = steelhead_annual, aes(x = year, y = annual_sum)) +
   geom_line(color = "maroon") +
   theme_minimal()+

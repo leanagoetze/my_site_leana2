@@ -230,7 +230,7 @@
   
   <meta property="og:site_name" content="Leana Goetze">
   <meta property="og:url" content="/project/project_three/project_three/">
-  <meta property="og:title" content="project_three | Leana Goetze">
+  <meta property="og:title" content="Time Series Analysis | Leana Goetze">
   <meta property="og:description" content="Introduction This project explores Steelhead fish use of the Bonneville Dam. Steelhead Trout are a migratory fish species, often migrating between the ocean and freshwater sources many times throughout their life. Steelhead trout are born in freshwater and migrate to the ocean before reaching adulthood. Later in life, these fish will migrate up the same river in which they were born to spawn (FWS). Human disturbances to the natural ecosystem, including the creation and modification of dams, are one of the many threats to Steelhead populations (Center for Biological Diversity)."><meta property="og:image" content="/images/icon_hu0b7a4cb9992c9ac0e91bd28ffd38dd00_9727_512x512_fill_lanczos_center_2.png">
   <meta property="twitter:image" content="/images/icon_hu0b7a4cb9992c9ac0e91bd28ffd38dd00_9727_512x512_fill_lanczos_center_2.png"><meta property="og:locale" content="en-us">
   
@@ -261,7 +261,7 @@
     "@type": "WebPage",
     "@id": "/project/project_three/project_three/"
   },
-  "headline": "project_three",
+  "headline": "Time Series Analysis",
   
   "datePublished": "0001-01-01T00:00:00Z",
   "dateModified": "0001-01-01T00:00:00Z",
@@ -297,7 +297,7 @@
 
 
 
-  <title>project_three | Leana Goetze</title>
+  <title>Time Series Analysis | Leana Goetze</title>
 
 </head>
 
@@ -610,7 +610,7 @@
   
   
 <div class="article-container pt-3">
-  <h1>project_three</h1>
+  <h1>Time Series Analysis</h1>
 
   
 
@@ -685,12 +685,12 @@
 <h3>Results</h3>
 <pre class="r"><code># Attach libraries and read in data
 library(tidyverse)</code></pre>
-<pre><code>## ── Attaching packages ────────────────────────────────────────────────── tidyverse 1.2.1 ──</code></pre>
+<pre><code>## ── Attaching packages ───────────────────────────────────────────────────────── tidyverse 1.2.1 ──</code></pre>
 <pre><code>## ✓ ggplot2 3.2.1     ✓ purrr   0.3.3
 ## ✓ tibble  2.1.3     ✓ dplyr   0.8.4
 ## ✓ tidyr   1.0.0     ✓ stringr 1.4.0
 ## ✓ readr   1.3.1     ✓ forcats 0.4.0</code></pre>
-<pre><code>## ── Conflicts ───────────────────────────────────────────────────── tidyverse_conflicts() ──
+<pre><code>## ── Conflicts ──────────────────────────────────────────────────────────── tidyverse_conflicts() ──
 ## x dplyr::filter() masks stats::filter()
 ## x dplyr::lag()    masks stats::lag()</code></pre>
 <pre class="r"><code>library(tsibble)</code></pre>
@@ -810,9 +810,8 @@ steelhead_annual &lt;- steelhead_final %&gt;%
 # annual_ts &lt;- as_tsibble(steelhead_annual, index = year)
 # annual_ts %&gt;% autoplot(annual_sum) # I&#39;ll graph in ggplot instead
 # annual_ts %&gt;% gg_subseries(annual_sum) # does not work
-# annual_ts %&gt;% gg_season(annual_sum) # does not work
-
-ggplot(data = steelhead_annual, aes(x = year, y = annual_sum)) +
+# annual_ts %&gt;% gg_season(annual_sum) # does not work</code></pre>
+<pre class="r"><code>ggplot(data = steelhead_annual, aes(x = year, y = annual_sum)) +
   geom_line(color = &quot;maroon&quot;) +
   theme_minimal()+
   labs(x = &quot;Year&quot;, y = &quot;Annual Fish Counts&quot;, title = &quot;Total Annual Steelhead Passage \n Through the Bonneville Dam&quot;)+
@@ -828,7 +827,7 @@ ggplot(data = steelhead_annual, aes(x = year, y = annual_sum)) +
                                      margin=margin(0,10,0,0)))+
   scale_color_gradient(low=&#39;#6CE98E&#39;, high=&#39;#5072DF&#39;)+
   scale_y_continuous(labels = scales::comma)</code></pre>
-<p><img src="/project/project_three/project_three_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p><img src="/project/project_three/project_three_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
 <p><strong>Figure 3: Annual Steelhead Trout counts at the Bonneville Dam.</strong> Yearly totals obtained from 1939-2019. Data: Columbia River Research</p>
 <p>It appears that while there are significant yearly fluctuations in Steelhead Trout populations traveling through the Bonneville dam, annual Steelhead Trout counts are generally increasing over time. Most notable, very large increases in Steelhead Trout populations were observed in 2001 and 2009. These dramatic increases were rapidly followed by a decline in fish by the following year.</p>
 </div>
@@ -861,7 +860,7 @@ ggplot(data = steelhead_annual, aes(x = year, y = annual_sum)) +
       
       
       <li>
-        <a href="https://twitter.com/intent/tweet?url=/project/project_three/project_three/&amp;text=project_three" target="_blank" rel="noopener" class="share-btn-twitter">
+        <a href="https://twitter.com/intent/tweet?url=/project/project_three/project_three/&amp;text=Time%20Series%20Analysis" target="_blank" rel="noopener" class="share-btn-twitter">
           <i class="fab fa-twitter"></i>
         </a>
       </li>
@@ -874,7 +873,7 @@ ggplot(data = steelhead_annual, aes(x = year, y = annual_sum)) +
       
       
       <li>
-        <a href="https://www.facebook.com/sharer.php?u=/project/project_three/project_three/&amp;t=project_three" target="_blank" rel="noopener" class="share-btn-facebook">
+        <a href="https://www.facebook.com/sharer.php?u=/project/project_three/project_three/&amp;t=Time%20Series%20Analysis" target="_blank" rel="noopener" class="share-btn-facebook">
           <i class="fab fa-facebook"></i>
         </a>
       </li>
@@ -887,7 +886,7 @@ ggplot(data = steelhead_annual, aes(x = year, y = annual_sum)) +
       
       
       <li>
-        <a href="mailto:?subject=project_three&amp;body=/project/project_three/project_three/" target="_blank" rel="noopener" class="share-btn-email">
+        <a href="mailto:?subject=Time%20Series%20Analysis&amp;body=/project/project_three/project_three/" target="_blank" rel="noopener" class="share-btn-email">
           <i class="fas fa-envelope"></i>
         </a>
       </li>
@@ -900,7 +899,7 @@ ggplot(data = steelhead_annual, aes(x = year, y = annual_sum)) +
       
       
       <li>
-        <a href="https://www.linkedin.com/shareArticle?url=/project/project_three/project_three/&amp;title=project_three" target="_blank" rel="noopener" class="share-btn-linkedin">
+        <a href="https://www.linkedin.com/shareArticle?url=/project/project_three/project_three/&amp;title=Time%20Series%20Analysis" target="_blank" rel="noopener" class="share-btn-linkedin">
           <i class="fab fa-linkedin-in"></i>
         </a>
       </li>
@@ -913,7 +912,7 @@ ggplot(data = steelhead_annual, aes(x = year, y = annual_sum)) +
       
       
       <li>
-        <a href="https://web.whatsapp.com/send?text=project_three%20/project/project_three/project_three/" target="_blank" rel="noopener" class="share-btn-whatsapp">
+        <a href="https://web.whatsapp.com/send?text=Time%20Series%20Analysis%20/project/project_three/project_three/" target="_blank" rel="noopener" class="share-btn-whatsapp">
           <i class="fab fa-whatsapp"></i>
         </a>
       </li>
@@ -926,7 +925,7 @@ ggplot(data = steelhead_annual, aes(x = year, y = annual_sum)) +
       
       
       <li>
-        <a href="https://service.weibo.com/share/share.php?url=/project/project_three/project_three/&amp;title=project_three" target="_blank" rel="noopener" class="share-btn-weibo">
+        <a href="https://service.weibo.com/share/share.php?url=/project/project_three/project_three/&amp;title=Time%20Series%20Analysis" target="_blank" rel="noopener" class="share-btn-weibo">
           <i class="fab fa-weibo"></i>
         </a>
       </li>

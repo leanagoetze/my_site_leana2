@@ -211,11 +211,15 @@
   </url>
   
   <url>
-    <loc>/project/project_three/project_three/</loc>
+    <loc>/project/project_two/project_two/</loc>
   </url>
   
   <url>
-    <loc>/project/project_two/project_two/</loc>
+    <loc>/project/project_four/project_four/</loc>
+  </url>
+  
+  <url>
+    <loc>/project/project_three/project_three/</loc>
   </url>
   
 </urlset>
