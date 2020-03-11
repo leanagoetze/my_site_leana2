@@ -6,7 +6,7 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
 ```
 ### Introduction 
 
@@ -14,6 +14,7 @@ This project explores Steelhead fish use of the Bonneville Dam. Steelhead Trout 
 
 <center>
 ```{r}
+# attach image
 knitr::include_graphics('/images/Rainbow_trout.png')
 ```
 
@@ -117,7 +118,6 @@ Observations of Steelhead Trout populations at the Bonneville dam appear to foll
 ```{r}
 # THREE: Time series of annual steelhead counts
 
-
 steelhead_annual <- steelhead_final %>% 
   group_by(year) %>% 
   summarize(annual_sum = sum(value))
@@ -130,6 +130,7 @@ steelhead_annual <- steelhead_final %>%
 ```
 
 ```{r}
+# graph annual data
 ggplot(data = steelhead_annual, aes(x = year, y = annual_sum)) +
   geom_line(color = "maroon") +
   theme_minimal()+

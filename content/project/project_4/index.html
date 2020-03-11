@@ -1,0 +1,112 @@
+---
+title: "Salamander ANOVA"
+author: "Leana Goetze"
+date: "3/10/2020"
+output: html_document
+---
+
+<script src="/rmarkdown-libs/kePrint/kePrint.js"></script>
+
+
+<div id="i.-introduction" class="section level3">
+<h3>I. Introduction</h3>
+<p>Pacific giant salamanders occupy streambeds and forests across the western coast of the united states. These salamanders spend the majority of their lives under logs, bark and stones. Since pacific giant salamanders are particularly sensitive to changes in water temperature and quality, measuring salamander populations can provide insight into the health of waterways. Thriving salamander populations, measured in salamander abundance and average salamander weights, can indicate healthy aquatic habitats (Oregon Wild). Human disturbances to forests, such as logging, can effect both water quality and temperature of nearby streams (Regional Aquatics Monitoring Program). Furthermore, water quality and temperature may vary according to channel type (cascade, pool, side-channel). Here, we use data collected by the Andrews Forest LTER research team to explore pacific giant salamander weights and abundances of salamanders living in cascades, pools and side-channels of clear cut and old growth regions of Mack Creek (1993-2017).</p>
+<p><img src="/images/salamander.jpg" /><!-- -->
+Credit: Gary Nafis</p>
+</div>
+<div id="ii.-data-and-methods" class="section level3">
+<h3>II. Data and Methods</h3>
+<p>Data for pacific giant salamander counts and weights (grams) from 1993- 2017 collected and provided by <a href="https://andrewsforest.oregonstate.edu">Andrews Forest LTER research team</a>. Salamander populations are monitored annually within 150 meter reaches of a clear cut forest and an old coniferous forest of Mack Creek in the Andrews Experimental Forest (see below). Salamander counts and weights are obtained upon capture using two-pass electrofishing. For more information on data collection procedures, and the project as a whole, see <a href="https://portal.lternet.edu/nis/mapbrowse?packageid=knb-lter-and.4027.12">metadata</a>. A Chi-square test was used to determine the effect of forest type on salamander abundance at various locations (α = 0.05 throughout). Mean salamander weights were compared for salamanders found at clear cut and old growth sections of Mack Creek (2017) by a two-sample t-test using a 95% confidence interval. Mean salamander weights were further compared between cascades, pools and side-channels using a one-way ANOVA and post-hoc HSD testing. All analyses and figures were prepared using R software version 3.6.1.</p>
+</div>
+<div id="iii.-results" class="section level3">
+<h3>III. Results</h3>
+<div id="a.-salamander-abundance-by-forested-section-of-mack-creek" class="section level5">
+<h5>A. <em>Salamander Abundance by Forested Section of Mack Creek</em></h5>
+<p><img src="/project/project_4/index_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p><strong>Figure 1: Abundance of pacific giant salamanders in clear cut and old growth sections of Mack Creek over time.</strong> Counts obtained annually from 150 m reaches of stream. Points indicate individual counts obtained. Old growth forested sections of Mack Creek are represented by green, while orange represents counts from clear cut sections of Mack Creek. Data Source: <a href="https://portal.lternet.edu/nis/mapbrowse?packageid=knb-lter-and.4027.12">Aquatic Vertebrate Population Study in Mack Creek</a></p>
+<p>Salamander abundance at both old growth and clear cut sections of Mack Creek appear to follow the same overall trends. Most notably, periods of sharp increases on salamander abundance, 2001-2003 and 2014-2017, are observed at both the clear cut and old growth sites. In addition, 2011-2014 was marked by a significant decrease in salamander counts at both sampled sections of Mack Creek. Although yearly fluctuations in salamander abundance vary between clear cut and old growth sections, the overall pattern of abundance increases and decreases can be observed across both sections between 1993-2017.</p>
+</div>
+<div id="b.-salamander-abundance-by-channel-type" class="section level5">
+<h5>B. <em>Salamander Abundance by Channel Type</em></h5>
+<strong>Table 1. Salamander Abundance by Channel Type in Clear Cut and Old Growth sections of Mack Creek</strong>
+<table class="table table table-bordered" style="margin-left: auto; margin-right: auto; width: auto !important; ">
+<thead>
+<tr>
+<th style="text-align:left;">
+Channel Type
+</th>
+<th style="text-align:left;">
+Clear Cut
+</th>
+<th style="text-align:left;">
+Old Growth
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;background-color: #EAF1FB !important;">
+Cascade
+</td>
+<td style="text-align:left;background-color: #EAF1FB !important;">
+247 (67%)
+</td>
+<td style="text-align:left;background-color: #EAF1FB !important;">
+201 (63%)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;background-color: #CCD5E1 !important;">
+Pool
+</td>
+<td style="text-align:left;background-color: #CCD5E1 !important;">
+31 (8%)
+</td>
+<td style="text-align:left;background-color: #CCD5E1 !important;">
+45 (14%)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;background-color: #AFB9C6 !important;">
+Side-channel
+</td>
+<td style="text-align:left;background-color: #AFB9C6 !important;">
+90 (24%)
+</td>
+<td style="text-align:left;background-color: #AFB9C6 !important;">
+74 (23%)
+</td>
+</tr>
+</tbody>
+</table>
+<p>The type of forested section of Mack Creek, either old growth or clear cut, does not have a significant effect on whether salamander are found at cascades, side-channels, or pools (<span class="math inline">\(\chi\)</span><sup>2</sup>(2)=5.54, <em>p</em> = 0.06). At 67% and 63%, the majority of Salamanders from both clear cut and old growth sections of Mack Creek were found at Cascades. Side-channels accounted for the next greatest abundance of salamanders from both sections sampled (24% and 23% respectively). Pools contained the fewest amount of salamanders across both sections of Mack Creek, accounting for only 8% and 14% of salamanders observed.</p>
+</div>
+<div id="c.-salamander-weights-by-forested-section-of-mack-creek-2017" class="section level5">
+<h5>C. <em>Salamander Weights by Forested Section of Mack Creek (2017)</em></h5>
+<p><img src="/project/project_4/index_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p><strong>Figure 2: Pacific giant salamander weights at clear cut and old growth sections of Mack Creek (2017).</strong> Density of clear cut (orange; n = 368) and old growth (green; n = 328) salamander weights based on measurements of captured salamanders within study region. Mean weights of salamanders found in clear cut and old growth sections of Mack Creek (7.78 and 6.58 grams respectively) are indicated by orange (clear cut) and green (old growth) dashed lines. Data Source: <a href="https://portal.lternet.edu/nis/mapbrowse?packageid=knb-lter-and.4027.12">Aquatic Vertebrate Population Study in Mack Creek</a></p>
+<p>Salamanders measured from clear cut and old growth forested sections of Mack Creek in 2017 differed by an average of only 1.19 grams. This difference is not statistically significant (t(692.79)) = 1.67, <em>p</em> = 0.1), and has a negligible effect size (Cohen’s d = 0.13).</p>
+</div>
+<div id="d.-salamander-weights-by-channel-type-2017" class="section level5">
+<h5>D. <em>Salamander Weights by channel Type (2017)</em></h5>
+<p><img src="/project/project_4/index_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<p><strong>Figure 3: Pacific giant salamander weights taken at cascades, pools, and side-channels of Mack Creek.</strong> Gray points indicate individual salamander weights, measured in grams. Maroon points indicate sample means, and error bars indicate <span class="math inline">\(\pm\)</span> standard error. Data Source: <a href="https://portal.lternet.edu/nis/mapbrowse?packageid=knb-lter-and.4027.12">Aquatic Vertebrate Population Study in Mack Creek</a></p>
+<p>Salamanders found at pools weigh, on average, 63.79% more than salamanders living in side-channels. The difference in mean salamander weights between salamanders found at pools (9.3 <span class="math inline">\(\pm\)</span> 1.56 grams) and side-channels (5.68 <span class="math inline">\(\pm\)</span> 0.65 grams) is statistically significant (one-way ANOVA with post-hoc Tukey’s HSD, F(2, 684) = 4.22, <em>p</em> &lt; 0.05). In contrast, salamanders found at pools weigh on average, 23.62% more than salamanders found at cascades, while salamanders found at cascades weigh on average 32.49% more than those found at side-channels. However, the differences in mean weights between salamanders found across cascades and pools and across cascades and side-channels are not statistically significantly (post-hoc Tukey’s HSD, <em>p</em> &gt; .05).</p>
+<p>An additional method for comparing salamander weights across the three channel types of Mack Creek would be to compare ranks of the measured weights using a Kruskal Wallis statistical test. This is often thought of as a comparison of medians, and is appropriate for this dataset because there are many outliers in our data. Since skew and outliers largely effect mean, and are present in our data as observed in Figure 2 &amp; 3, comparing medians may make for a more appropriate comparison of Salamander weights across the three Mack Creek channel types.</p>
+</div>
+</div>
+<div id="iv.-summary" class="section level3">
+<h3>IV. Summary</h3>
+<ul>
+<li><p>Trends in salamander abundance at Mack Creek over time were similar at both clear cut and old growth sections of the creek (Figure 1)</p></li>
+<li><p>There is not a significant association between forest type (clear cut and old growth) and whether salamanders are found at cascades, pools, or side-channels (Table 1)</p></li>
+<li><p>There is not a significant average weight difference between salamanders found at clear cut forests compared to salamanders found at old growth forests (Figure 2)</p></li>
+<li><p>There is a significant difference in mean weight between salamanders found at pools and side-channels, but no significance differences were found when comparing across other group combinations (Figure 3)</p></li>
+</ul>
+</div>
+<div id="references" class="section level3">
+<h3>References</h3>
+<p><strong>Gregory S. V. 2016.</strong> Aquatic Vertebrate Population Study in Mack Creek, Andrews Experimental Forest, 1987 to present. Environmental Data Initiative. <a href="https://doi.org/10.6073/pasta/5de64af9c11579266ef20da2ff32f702" class="uri">https://doi.org/10.6073/pasta/5de64af9c11579266ef20da2ff32f702</a>. Dataset accessed 11/24/2019.</p>
+<p><strong>Oregon Wild.</strong> “Pacific Giant Salamander.” <a href="regonwild.org/wildlife/pacific-giant-salamander">oregonwild.org/wildlife/pacific-giant-salamander</a>.</p>
+<p><strong>Regional Aquatics Monitoring Program.</strong> “Potential Effects of Forestry on Aquatic Ecosystems.” <a href="ww.ramp-alberta.org/resources/forestry/potential+effects.aspx">www.ramp-alberta.org/resources/forestry/potential+effects.aspx</a>.</p>
+</div>

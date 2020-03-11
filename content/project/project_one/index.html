@@ -23,7 +23,8 @@ output: html_document
 <p>Data for snowshoe hare weights, measured in grams, from 1999-2012 collected and provided by <a href="https://doi.org/10.6073/pasta/03dce4856d79b91557d8e6ce2cbcdc14">Bonanza Creek LTER research team</a>. Hare measurements obtained from capture-recapture studies across 5 locations in the Tanana valley. For more information on data collection procedures, and the project as a whole, see <a href="https://portal.lternet.edu/nis/metadataviewer?packageid=knb-lter-bnz.55.22">metadata</a>. Data from September, October, and November have been grouped together under “fall”, March, April, and May have been grouped under “spring”, and June, July, and August have been grouped under “Summer”. We did not compare data from the winter months due to a deficit in data collected during this time. Additionally, observations without clear age or gender measurements were removed. All figures were prepared using R software version 3.6.1.</p>
 <center>
 <p>!</p>
-<pre class="r"><code>knitr::include_graphics(&#39;/images/map.jpg&#39;)</code></pre>
+<pre class="r"><code># attach intro image
+knitr::include_graphics(&#39;/images/map.jpg&#39;)</code></pre>
 <p><img src="/images/map.jpg" /><!-- --></p>
 </center>
 <p>Snowshoe hare capture-recapture studies occured along the Tanana River and throughout the Bonanza Experimental Research Forest.</p>
@@ -72,7 +73,7 @@ hare_summary &lt;- hare_seasons %&gt;%
             sample_n = n(),
             se_weight = round(sd(weight, na.rm = TRUE) / sqrt(n()),1),
             var_weight = var(weight, na.rm = TRUE))</code></pre>
-<pre class="r"><code># make graph visualizing adult male snowshoe hare weights by season and customize
+<pre class="r"><code># make graph visualizing adult male snowshoe hare weights by season and customize graph
 ggplot()+
 geom_beeswarm (data = hare_seasons, aes(x = season, y = weight), size = 1, alpha = .5,pch = 16, color = &quot;#4D6483&quot;)+
 scale_x_discrete (labels = c(&quot;Fall&quot;, &quot;Spring&quot;, &quot;Summer&quot;, &quot;Winter&quot;))+

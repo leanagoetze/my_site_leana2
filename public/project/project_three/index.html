@@ -605,7 +605,8 @@
 <h3>Introduction</h3>
 <p>This project explores Steelhead fish use of the Bonneville Dam. Steelhead Trout are a migratory fish species, often migrating between the ocean and freshwater sources many times throughout their life. Steelhead trout are born in freshwater and migrate to the ocean before reaching adulthood. Later in life, these fish will migrate up the same river in which they were born to spawn (FWS). Human disturbances to the natural ecosystem, including the creation and modification of dams, are one of the many threats to Steelhead populations (Center for Biological Diversity). The Bonneville dam, located between Oregon and Washington, is complete with a 70 foot fish ladder which allows for the safe passage of fish through the dam (Northwest Power and Conservation Council). This project explores the daily, monthly, and annual counts of Steelhead Trout observed passing through the Bonneville dam from 1939-2019. Data provided by <a href="http://www.cbr.washington.edu/dart/query/adult_graph_text">Columbia River Research</a>.</p>
 <center>
-<pre class="r"><code>knitr::include_graphics(&#39;/images/Rainbow_trout.png&#39;)</code></pre>
+<pre class="r"><code># attach image
+knitr::include_graphics(&#39;/images/Rainbow_trout.png&#39;)</code></pre>
 <p><img src="/images/Rainbow_trout.png" /><!-- --></p>
 </center>
 <p>Credit: Duane Raver</p>
@@ -613,64 +614,25 @@
 <div id="results" class="section level3">
 <h3>Results</h3>
 <pre class="r"><code># Attach libraries and read in data
-library(tidyverse)</code></pre>
-<pre><code>## ── Attaching packages ───────────────────────────────────────────────────────── tidyverse 1.2.1 ──</code></pre>
-<pre><code>## ✓ ggplot2 3.2.1     ✓ purrr   0.3.3
-## ✓ tibble  2.1.3     ✓ dplyr   0.8.4
-## ✓ tidyr   1.0.0     ✓ stringr 1.4.0
-## ✓ readr   1.3.1     ✓ forcats 0.4.0</code></pre>
-<pre><code>## ── Conflicts ──────────────────────────────────────────────────────────── tidyverse_conflicts() ──
-## x dplyr::filter() masks stats::filter()
-## x dplyr::lag()    masks stats::lag()</code></pre>
-<pre class="r"><code>library(tsibble)</code></pre>
-<pre><code>## 
-## Attaching package: &#39;tsibble&#39;</code></pre>
-<pre><code>## The following object is masked from &#39;package:dplyr&#39;:
-## 
-##     id</code></pre>
-<pre class="r"><code>library(fable)</code></pre>
-<pre><code>## Loading required package: fabletools</code></pre>
-<pre class="r"><code>library(fabletools)
+library(tidyverse)
+library(tsibble)
+library(fable)
+library(fabletools)
 library(feasts)
-library(forecast)</code></pre>
-<pre><code>## Registered S3 method overwritten by &#39;quantmod&#39;:
-##   method            from
-##   as.zoo.data.frame zoo</code></pre>
-<pre><code>## Registered S3 methods overwritten by &#39;forecast&#39;:
-##   method             from    
-##   fitted.fracdiff    fracdiff
-##   residuals.fracdiff fracdiff</code></pre>
-<pre><code>## 
-## Attaching package: &#39;forecast&#39;</code></pre>
-<pre><code>## The following objects are masked from &#39;package:fabletools&#39;:
-## 
-##     GeomForecast, StatForecast</code></pre>
-<pre class="r"><code>library(janitor)</code></pre>
-<pre><code>## 
-## Attaching package: &#39;janitor&#39;</code></pre>
-<pre><code>## The following objects are masked from &#39;package:stats&#39;:
-## 
-##     chisq.test, fisher.test</code></pre>
-<pre class="r"><code>steelhead &lt;- read_csv(&quot;cbr_fish_passage_bonneville_allyrs_steelhead.csv&quot;)</code></pre>
-<pre><code>## Parsed with column specification:
-## cols(
-##   year = col_double(),
-##   `mm-dd` = col_character(),
-##   location = col_character(),
-##   parameter = col_character(),
-##   unit = col_character(),
-##   datatype = col_character(),
-##   value = col_double()
-## )</code></pre>
+library(forecast)
+library(janitor)
+
+steelhead &lt;- read_csv(&quot;cbr_fish_passage_bonneville_allyrs_steelhead.csv&quot;)</code></pre>
 <pre class="r"><code># wrangle to get dates in various formats
 steelhead_date &lt;- steelhead %&gt;% 
   clean_names() %&gt;% 
   separate(mm_dd, into = c(&quot;day&quot;,&quot;month_abb&quot;), sep = &quot;-&quot;) %&gt;% 
   mutate (month = match(month_abb,month.abb)) 
 
-steelhead_date$new_date &lt;-lubridate::ymd(paste(steelhead_date$year, steelhead_date$month, steelhead_date$day, sep=&quot;-&quot;)) </code></pre>
-<pre><code>## Warning: 61 failed to parse.</code></pre>
-<pre class="r"><code>steelhead_date_2 &lt;- steelhead_date %&gt;%
+steelhead_date$new_date &lt;-lubridate::ymd(paste(steelhead_date$year, steelhead_date$month, steelhead_date$day, sep=&quot;-&quot;)) 
+
+
+steelhead_date_2 &lt;- steelhead_date %&gt;%
   drop_na(new_date, value) %&gt;% 
   mutate(month_sep = yearmonth(new_date)) %&gt;% 
   mutate(value = as.numeric(value)) %&gt;% 
@@ -730,7 +692,6 @@ ggplot(steelhead_monthly, aes(x = month_new, y = month_sum, group = year)) +
 <p>Observations of Steelhead Trout populations at the Bonneville dam appear to follow similar monthly trends across the years. While very few fish are observed between January-May and October-November, fish counts have drastically increased during June-September months during all recorded years. It appears that monthly fish counts are greatest in August, possibly suggesting yearly migration patterns.</p>
 <pre class="r"><code># THREE: Time series of annual steelhead counts
 
-
 steelhead_annual &lt;- steelhead_final %&gt;% 
   group_by(year) %&gt;% 
   summarize(annual_sum = sum(value))
@@ -740,7 +701,8 @@ steelhead_annual &lt;- steelhead_final %&gt;%
 # annual_ts %&gt;% autoplot(annual_sum) # I&#39;ll graph in ggplot instead
 # annual_ts %&gt;% gg_subseries(annual_sum) # does not work
 # annual_ts %&gt;% gg_season(annual_sum) # does not work</code></pre>
-<pre class="r"><code>ggplot(data = steelhead_annual, aes(x = year, y = annual_sum)) +
+<pre class="r"><code># graph annual data
+ggplot(data = steelhead_annual, aes(x = year, y = annual_sum)) +
   geom_line(color = &quot;maroon&quot;) +
   theme_minimal()+
   labs(x = &quot;Year&quot;, y = &quot;Annual Fish Counts&quot;, title = &quot;Total Annual Steelhead Passage \n Through the Bonneville Dam&quot;)+
@@ -895,7 +857,7 @@ steelhead_annual &lt;- steelhead_final %&gt;%
     <div class="media-body">
       <h5 class="card-title"><a href="/">Leana Goetze</a></h5>
       <h6 class="card-subtitle">Master student in Environmental Science and Management</h6>
-      <p class="card-text">My research interests include distributed robotics, mobile computing and programmable matter.</p>
+      
       <ul class="network-icon" aria-hidden="true">
   
     

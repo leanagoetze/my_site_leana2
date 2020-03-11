@@ -23,6 +23,7 @@ Data for snowshoe hare weights, measured in grams, from 1999-2012 collected and 
 <center>!
 
 ```{r}
+# attach intro image
 knitr::include_graphics('/images/map.jpg')
 ```
 
@@ -94,7 +95,7 @@ hare_summary <- hare_seasons %>%
 ```
 
 ```{r}
-# make graph visualizing adult male snowshoe hare weights by season and customize
+# make graph visualizing adult male snowshoe hare weights by season and customize graph
 ggplot()+
 geom_beeswarm (data = hare_seasons, aes(x = season, y = weight), size = 1, alpha = .5,pch = 16, color = "#4D6483")+
 scale_x_discrete (labels = c("Fall", "Spring", "Summer", "Winter"))+

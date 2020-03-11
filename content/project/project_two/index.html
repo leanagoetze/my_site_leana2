@@ -8,7 +8,8 @@ output: html_document
 
 
 <center>
-<pre class="r"><code>knitr::include_graphics(&#39;/images/fastfood.jpg&#39;)</code></pre>
+<pre class="r"><code># attach intro image
+knitr::include_graphics(&#39;/images/fastfood.jpg&#39;)</code></pre>
 <p><img src="/images/fastfood.jpg" /><!-- --></p>
 </center>
 <p>Credit: <a href="https://www.freepik.com">freepik</a></p>
@@ -16,36 +17,12 @@ output: html_document
 <h3>Introduction</h3>
 <p>This report explores the relationship between nutrients present in sampled fast foods. The nutritional content of 371 common fast food items were analyzed, using 11 common nutritional measures for comparison. This report will explore which nutrients, if any, were positively and negatively correlated to one another. Data for this project provided USDA (National Nutrient Database), now <a href="https://fdc.nal.usda.gov/index.html">FoodData Central</a></p>
 <pre class="r"><code># read in data and attach packages
-library(tidyverse)</code></pre>
-<pre><code>## ── Attaching packages ───────────────────────────────────────────────────────── tidyverse 1.2.1 ──</code></pre>
-<pre><code>## ✓ ggplot2 3.2.1     ✓ purrr   0.3.3
-## ✓ tibble  2.1.3     ✓ dplyr   0.8.4
-## ✓ tidyr   1.0.0     ✓ stringr 1.4.0
-## ✓ readr   1.3.1     ✓ forcats 0.4.0</code></pre>
-<pre><code>## ── Conflicts ──────────────────────────────────────────────────────────── tidyverse_conflicts() ──
-## x dplyr::filter() masks stats::filter()
-## x dplyr::lag()    masks stats::lag()</code></pre>
-<pre class="r"><code>library(janitor)</code></pre>
-<pre><code>## 
-## Attaching package: &#39;janitor&#39;</code></pre>
-<pre><code>## The following objects are masked from &#39;package:stats&#39;:
-## 
-##     chisq.test, fisher.test</code></pre>
-<pre class="r"><code>library(ggfortify)
+library(tidyverse)
+library(janitor)
+library(ggfortify)
 
 food &lt;- read_csv(&quot;usda_nutrients.csv&quot;) %&gt;% 
   clean_names() </code></pre>
-<pre><code>## Parsed with column specification:
-## cols(
-##   .default = col_double(),
-##   FoodGroup = col_character(),
-##   ShortDescrip = col_character(),
-##   Descrip = col_character(),
-##   CommonName = col_character(),
-##   MfgName = col_character(),
-##   ScientificName = col_character()
-## )</code></pre>
-<pre><code>## See spec(...) for full column specifications.</code></pre>
 <pre class="r"><code>#Select data of interest, drop na values, rename columes
 food_filtered &lt;- food %&gt;% 
   filter(food_group == &quot;Fast Foods&quot;) %&gt;% 
@@ -89,8 +66,7 @@ food_biplot &lt;- autoplot(food_pca,
                                      size = 14,
                                      margin=margin(0,10,0,0)))
 food_biplot</code></pre>
-<pre><code>## Warning: Removed 371 rows containing missing values (geom_point).</code></pre>
-<p><img src="/project/project_two/project_two_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p><img src="/project/project_two/index_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
 <p><strong>Figure 1: Principal component analysis: fast food nutritional content.</strong> Analyis performed on 371 common fast food items. Smaller angles between variables (maroon arrows) indicate highly correlated nutrients, such as carbohydrates and fiber. Variance of the variables are represented by arrow length, with longer lengths representing larger variances.</p>
 </div>
 <div id="summary" class="section level3">

@@ -504,19 +504,18 @@
     <h2><a href="/project/project_two/">Principal Component Analysis</a></h2>
     <div class="article-style">
       
-      knitr::include_graphics(&#39;/images/fastfood.jpg&#39;)  Credit: freepik
+      # attach intro image knitr::include_graphics(&#39;/images/fastfood.jpg&#39;)  Credit: freepik
 Introduction This report explores the relationship between nutrients present in sampled fast foods. The nutritional content of 371 common fast food items were analyzed, using 11 common nutritional measures for comparison. This report will explore which nutrients, if any, were positively and negatively correlated to one another. Data for this project provided USDA (National Nutrient Database), now FoodData Central
-# read in data and attach packages library(tidyverse) ## ── Attaching packages ───────────────────────────────────────────────────────── tidyverse 1.
+# read in data and attach packages library(tidyverse) library(janitor) library(ggfortify) food &lt;- read_csv(&quot;usda_nutrients.
       
     </div>
   </div>
   
   <div>
-    <h2><a href="/project/project_four/project_four/">project_four</a></h2>
+    <h2><a href="/project/project_4/">Salamander ANOVA</a></h2>
     <div class="article-style">
       
-      Land Cover Data made available by Hawaii Statewide GIS Program. Data measures the various land use types on the Hawaiian Islands. Watershed Data made available by Hawaii Statewide GIS Program. Data measures watershed characterisitics of the Hawaiian Islands.
-# attach packages library(tidyverse) library(sf) library(tmap) library(here) library(janitor) library(mapview) library(paletteer) # read in data land &lt;-read_sf(here(&quot;content&quot;,&quot;project&quot;,&quot;project_four&quot;,&quot;Land_Use_Land_Cover_LULC&quot;), layer = &quot;Land_Use_Land_Cover_LULC&quot;) %&gt;% clean_names() # select data of interest land_two &lt;- land %&gt;% select(landcover) # create an interactive map of land cover tmap_mode(&quot;view&quot;)+ tm_shape(land_two)+ tm_borders(&quot;white&quot;, lwd = .
+      I. Introduction Pacific giant salamanders occupy streambeds and forests across the western coast of the united states. These salamanders spend the majority of their lives under logs, bark and stones. Since pacific giant salamanders are particularly sensitive to changes in water temperature and quality, measuring salamander populations can provide insight into the health of waterways. Thriving salamander populations, measured in salamander abundance and average salamander weights, can indicate healthy aquatic habitats (Oregon Wild).
       
     </div>
   </div>
