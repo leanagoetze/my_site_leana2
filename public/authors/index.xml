@@ -5,7 +5,7 @@
     <link>/authors/</link>
       <atom:link href="/authors/index.xml" rel="self" type="application/rss+xml" />
     <description>Authors</description>
-    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Sun, 07 Apr 2019 00:00:00 +0000</lastBuildDate>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Sun, 01 Mar 2020 00:00:00 +0000</lastBuildDate>
     <image>
       <url>/images/icon_hu0b7a4cb9992c9ac0e91bd28ffd38dd00_9727_512x512_fill_lanczos_center_2.png</url>
       <title>Authors</title>
@@ -13,9 +13,121 @@
     </image>
     
     <item>
+      <title>Alan J.Conley</title>
+      <link>/authors/alan-j.conley/</link>
+      <pubDate>Sun, 01 Mar 2020 00:00:00 +0000</pubDate>
+      <guid>/authors/alan-j.conley/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Emily S.Rothwell</title>
+      <link>/authors/emily-s.rothwell/</link>
+      <pubDate>Sun, 01 Mar 2020 00:00:00 +0000</pubDate>
+      <guid>/authors/emily-s.rothwell/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Karen L.Bales</title>
+      <link>/authors/karen-l.bales/</link>
+      <pubDate>Sun, 01 Mar 2020 00:00:00 +0000</pubDate>
+      <guid>/authors/karen-l.bales/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Leana R.Goetze</title>
+      <link>/authors/leana-r.goetze/</link>
+      <pubDate>Sun, 01 Mar 2020 00:00:00 +0000</pubDate>
+      <guid>/authors/leana-r.goetze/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Logan E.Savidge</title>
+      <link>/authors/logan-e.savidge/</link>
+      <pubDate>Sun, 01 Mar 2020 00:00:00 +0000</pubDate>
+      <guid>/authors/logan-e.savidge/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Lynea R.Witczak</title>
+      <link>/authors/lynea-r.witczak/</link>
+      <pubDate>Sun, 01 Mar 2020 00:00:00 +0000</pubDate>
+      <guid>/authors/lynea-r.witczak/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Marjorie Solomon</title>
+      <link>/authors/marjorie-solomon/</link>
+      <pubDate>Sun, 01 Mar 2020 00:00:00 +0000</pubDate>
+      <guid>/authors/marjorie-solomon/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Rebecca H.Lawrence</title>
+      <link>/authors/rebecca-h.lawrence/</link>
+      <pubDate>Sun, 01 Mar 2020 00:00:00 +0000</pubDate>
+      <guid>/authors/rebecca-h.lawrence/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Rocío Arias del Razo</title>
+      <link>/authors/rocio-arias-del-razo/</link>
+      <pubDate>Sun, 01 Mar 2020 00:00:00 +0000</pubDate>
+      <guid>/authors/rocio-arias-del-razo/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Sally P.Mendoza</title>
+      <link>/authors/sally-p.mendoza/</link>
+      <pubDate>Sun, 01 Mar 2020 00:00:00 +0000</pubDate>
+      <guid>/authors/sally-p.mendoza/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Sara M.Freeman</title>
+      <link>/authors/sara-m.freeman/</link>
+      <pubDate>Sun, 01 Mar 2020 00:00:00 +0000</pubDate>
+      <guid>/authors/sara-m.freeman/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Suma Jacob</title>
+      <link>/authors/suma-jacob/</link>
+      <pubDate>Sun, 01 Mar 2020 00:00:00 +0000</pubDate>
+      <guid>/authors/suma-jacob/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Tamara A.R.Weinstein</title>
+      <link>/authors/tamara-a.r.weinstein/</link>
+      <pubDate>Sun, 01 Mar 2020 00:00:00 +0000</pubDate>
+      <guid>/authors/tamara-a.r.weinstein/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Tris Berger</title>
+      <link>/authors/tris-berger/</link>
+      <pubDate>Sun, 01 Mar 2020 00:00:00 +0000</pubDate>
+      <guid>/authors/tris-berger/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title></title>
       <link>/authors/admin/</link>
-      <pubDate>Sun, 07 Apr 2019 00:00:00 +0000</pubDate>
+      <pubDate>Tue, 05 Feb 2019 00:00:00 +0000</pubDate>
       <guid>/authors/admin/</guid>
       <description>&lt;p&gt;Leana Goetze is pursuing her a Master degree in Environmental Science and Management from UCSB&#39;s Bren School of Environmental Science &amp;amp; Management.  She is particularly interested in conservation biology and would like to focus on analyzing and mapping spatial data to enhance habitat conservation efforts.&lt;/p&gt;
 &lt;p&gt;Upon graduating from the University of California, Davis in 2014 with a Bachelor of Science in Biological Sciences, her desire to work with animals led her to the field of primatology. She was involved in studying primate social behavior for over five years before deciding to return to school to recieve further technical training. While specializing in Conservation Planning with a focus on environmental data science from the Bren school, she is especially interested in quantitatively measuring the effects of habitat loss, degradation, and fragmentation on wildlife populations with the hopes of using such data to preserve biodiversity.&lt;/p&gt;
@@ -23,10 +135,74 @@
     </item>
     
     <item>
-      <title>Robert Ford</title>
-      <link>/authors/robert-ford/</link>
+      <title>Benjamin J. Ragen</title>
+      <link>/authors/benjamin-j.-ragen/</link>
       <pubDate>Tue, 01 Sep 2015 00:00:00 +0000</pubDate>
-      <guid>/authors/robert-ford/</guid>
+      <guid>/authors/benjamin-j.-ragen/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Karen L. Bales</title>
+      <link>/authors/karen-l.-bales/</link>
+      <pubDate>Tue, 01 Sep 2015 00:00:00 +0000</pubDate>
+      <guid>/authors/karen-l.-bales/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Leana R. Goetze</title>
+      <link>/authors/leana-r.-goetze/</link>
+      <pubDate>Tue, 01 Sep 2015 00:00:00 +0000</pubDate>
+      <guid>/authors/leana-r.-goetze/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Luana L. Griffin</title>
+      <link>/authors/luana-l.-griffin/</link>
+      <pubDate>Tue, 01 Sep 2015 00:00:00 +0000</pubDate>
+      <guid>/authors/luana-l.-griffin/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Marina L. Fisher‐Phelps</title>
+      <link>/authors/marina-l.-fisherphelps/</link>
+      <pubDate>Tue, 01 Sep 2015 00:00:00 +0000</pubDate>
+      <guid>/authors/marina-l.-fisherphelps/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Michael R. Jarcho</title>
+      <link>/authors/michael-r.-jarcho/</link>
+      <pubDate>Tue, 01 Sep 2015 00:00:00 +0000</pubDate>
+      <guid>/authors/michael-r.-jarcho/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Sally P. Mendoza</title>
+      <link>/authors/sally-p.-mendoza/</link>
+      <pubDate>Tue, 01 Sep 2015 00:00:00 +0000</pubDate>
+      <guid>/authors/sally-p.-mendoza/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Samantha Serna</title>
+      <link>/authors/samantha-serna/</link>
+      <pubDate>Tue, 01 Sep 2015 00:00:00 +0000</pubDate>
+      <guid>/authors/samantha-serna/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Thomas J. Schaefer</title>
+      <link>/authors/thomas-j.-schaefer/</link>
+      <pubDate>Tue, 01 Sep 2015 00:00:00 +0000</pubDate>
+      <guid>/authors/thomas-j.-schaefer/</guid>
       <description></description>
     </item>
     
